@@ -1,0 +1,173 @@
+#!/usr/bin/perl
+# ============================================================================
+#             Copyright (c) 2014 Kevin L. Esteb All Rights Reserved
+#
+#
+# TITLE:       xas-collector
+#
+# FACILITY:    XAS 
+#
+# ABSTRACT:    This procdure will collect alert data from the message queue
+#              and store it into a database.
+#
+# ENVIRONMENT: XAS Environment
+#
+# PARAMETERS:  
+#              --host         the host to attach too
+#              --port         the port to send too
+#              --logfile      the log file to use
+#              --log-type     the type of log file
+#              --log-facility the facility class of the log
+#              --pidfile      the pid file to use
+#              --cfgfile      the configuration file to use
+#              --install      install as a service on Windows
+#              --deinstall    deinstall as a service on Windows
+#              --help         prints out a helpful help message
+#              --manual       prints out the procedures manual
+#              --version      prints out the procedures version
+#              --debug        toggles debug output
+#              --daemon       wither to become a daemon
+#              --alerts       toggles alert notification
+#
+# RETURNS:     0 - success
+#              1 - failure
+#              2 - already running
+#
+# Version      Author                                              Date
+# -------      ----------------------------------------------      -----------
+# 0.01         Kevin Esteb                                         25-Nov-2014
+#
+# ============================================================================
+#
+
+#use lib "../lib";
+use XAS::Apps::Collector::Process;
+
+main: {
+
+    my $app = XAS::Apps::Collector::Process->new(
+        -throws  => 'xas-collector',
+    );
+
+    exit $app->run();
+
+}
+
+__END__
+
+=head1 NAME
+
+xas-collector - Collects events for the XAS environment
+
+=head1 SYNOPSIS
+
+xas-collector [--help] [--debug] [--manual] [--version]
+
+ options:
+
+    --host         the host to attach too
+    --port         the port to send too
+    --logfile      the log file to use
+    --log-type     the type of log file
+    --log-facility the facility class of the log
+    --pidfile      the pid file to use
+    --cfgfile      the configuration file to use
+    --install      install as a service on Windows
+    --deinstall    deinstall as a service on Windows
+    --help         prints out a helpful help message
+    --manual       prints out the procedures manual
+    --version      prints out the procedures version
+    --debug        toggles debug output
+    --daemon       wither to become a daemon
+    --alerts       toggles alert notification
+
+=head1 DESCRIPTION
+
+This procdure will collect alert data from the message queue and store 
+it into a database.
+
+=head1 OPTIONS AND ARGUMENTS
+
+=over 4
+
+=item B<--host>
+
+Where the Message Queue server resides.
+
+=item B<--port>
+
+The port for that server.
+
+=item B<-cfgfile>
+
+The configuration file to use.
+
+=item B<--log-type>
+
+Toggles the log type. Defaults to 'console'. Can be 'console', 'file', 
+'json' or 'syslog'.
+
+=item B<--log-facility>
+
+Toggles the log facilty. Defaults to 'local6'. This follows syslog
+convention.
+
+=item B<--logfile>
+
+The log file to use.
+
+=item B<--pidfile>
+
+the pid file to use.
+
+=item B<--daemon>
+
+Run as a daemon.
+
+=item B<--debug>
+
+Turns on debbuging.
+
+=item B<--help>
+
+Displays a simple help message.
+
+=item B<--manual>
+
+The complete documentation.
+  
+=item B<--version>
+
+Prints out the apps version
+
+=back
+
+=head1 EXIT CODES
+
+ 0 - success
+ 1 - failure
+ 2 - already running
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<XAS|XAS>
+
+=item L<XAS::Collector|XAS::Collector>
+
+=back
+
+=head1 AUTHOR
+
+Kevin L. Esteb, E<lt>kesteb@kesteb.usE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2014 by Kevin L. Esteb
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.8.8 or,
+at your option, any later version of Perl 5 you may have available.
+
+=cut
