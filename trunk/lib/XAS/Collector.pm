@@ -16,26 +16,30 @@ XAS::Collector - A set of procedures and modules to interact with message queues
 =head1 DESCRIPTION
 
 These modules are used to collect messages from a STOMP based message queue
-server. These messages are then parsed and forwarded to a Logstash instance.
-From there, Logstash can forward them to a final distntation. In my case, that 
-is Elasticsearch. 
+server. The messages are then parsed and forwarded to an appropiate
+datastore.
 
-These modules only support the self generated Alerts and the direct logging 
-to the Logstash spooling process. Both of them use the same Logstash JSON 
-Event format. Which makes viewing the entries with Kibana easier. 
+=head1 SEE ALSO
 
-You may be wondering why these modules are needed. Logstash does have a STOMP
-connector, which I could never get to work. These modules use the raw TCP/IP 
-port connector, which has it own set of problems. One of which is, if 
-Elasticsearch goes into a cluster transition, you may lose data, as Logstash
-doesn't appear to handle that very well.
+=over 4
 
-=head1 SUPPORT
+=item L<XAS|XAS>
 
-You can find documentation for this module with the perldoc command.
+=item L<XAS::Collector::Connector|XAS::Collector::Connector>
 
-    perldoc XAS
-    perldoc XAS::Collector
+=item L<XAS::Collector::Alerts::Database|XAS::Collector::Alerts::Database>
+
+=item L<XAS::Collector::Alerts::Logstash|XAS::Collector::Alerts::Logstash>
+
+=item L<XAS::Collector::Logs::Database|XAS::Collector::Logs::Database>
+
+=item L<XAS::Collector::Logs::Logstash|XAS::Collector::Logs::Logstash>
+
+=item L<XAS::Model::Database::Messaging::Result::Alert|XAS::Model::Database::Messaging::Alert>
+
+=item L<XAS::Model::Database::Messaging::Result::Log|XAS::Model::Database::Messaging::Result::Log>
+
+=back
 
 =head1 AUTHOR
 
