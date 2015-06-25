@@ -97,7 +97,7 @@ you would issue the following commands:
     # service xas-collector start
     # chkconfig --add xas-collector
 
-On Windows would use these command:
+On Windows, use these commands:
 
    > xas-collector --install
    > sc start XAS_COLLECTOR
