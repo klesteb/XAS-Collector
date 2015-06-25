@@ -11,7 +11,7 @@ __END__
 
 =head1 NAME
 
-XAS::Collector - A set of procedures and modules to interact with message queues
+XAS::Collector - A set of procedures and modules to retrieve messages and store them
 
 =head1 DESCRIPTION
 

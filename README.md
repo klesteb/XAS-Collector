@@ -10,14 +10,16 @@ This system is cross platform capable. It will run under Windows as well
 as Unix like environments without a code rewrite. This allows you to
 write your code once and run it wherever.
 
-This code is based on a production system that has been running for over
-10 years. It incorporates the accumulated knowledge of running a
-distributed system, written in Perl5.
-
 Installation of this system is fairly straight forward. You can install
 it in the usual Perl fashion or there are build scripts for creating
-Debian and RedHat install packages. Please see the included README for
+Debian and RHEL install packages. Please see the included README for
 details.
+
+This package provides the modules and procedures to interact with a
+Message Queue Server. It will retrieve messages, parse them and then
+store them in an appropiate datastore. The currently defined datastores
+are SQLite and Logstash. The provided modules can handle alerts and
+json logging.
 
 Extended documentation is available at: http://scm.kesteb.us/trac
 

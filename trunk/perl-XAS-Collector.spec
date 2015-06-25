@@ -65,6 +65,15 @@ find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null \;
 %check
 ./Build test
 
+%post
+if ! grep "messaging" /etc/xas/database.ini &>/dev/null
+then
+    echo " " >> /etc/xas/database.ini
+    echo "[messaging]" >> /etc/xas/database.ini
+    echo "dbname = /usr/lib/xas/messaging.db" >> /etc/xas/database.ini
+    echo "dsn = SQLite" >> /etc/xas/database.ini
+fi
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 

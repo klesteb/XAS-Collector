@@ -31,6 +31,13 @@ set -e
 
 case "$1" in
     configure)
+        if ! grep "messaging" /etc/xas/database.ini &>/dev/null
+        then
+            echo " " >> /etc/xas/database.ini
+            echo "[messaging]" >> /etc/xas/database.ini
+            echo "dbname = /usr/lib/xas/messaging.db" >> /etc/xas/database.ini
+            echo "dsn = SQLite" >> /etc/xas/database.ini
+        fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

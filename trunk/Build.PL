@@ -4,6 +4,7 @@ use Module::Build;
 
 my $requires = {
     'XAS' => '0.08',
+    'XAS-Model' => '0.01',
 };
     
 my $sysconfig = ( -e '/etc/default' ) ? '/etc/default' : '/etc/sysconfig';
@@ -96,7 +97,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
 
             eval { $parser->parse_from_file( $file, $outfile ); 1 }
                  or $self->log_warn("Error creating '$outfile': $@\n");
-          
+
             $files->{$file} = $outfile;
 
         }
@@ -111,7 +112,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
         # cleanup the init.d directory
 
         my $destdir = $self->destdir;
-        my @files = ('xas-spooler', 'xas-collector-alerts', 'xas-collector-logstash'); 
+        my @files = (''xas-collector'); 
         my @names = map { catfile($destdir, 'etc', 'init.d', $_ . '.rhel') } @files;
 
         foreach my $file (@names) {
@@ -145,7 +146,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
         # cleanup the init.d directory
 
         my $destdir = $self->destdir;
-        my @files = ('xas-spooler', 'xas-collector-alerts', 'xas-collector-logstash'); 
+        my @files = ('xas-collector'); 
         my @names = map { catfile($destdir, 'etc',  'init.d', $_ . '.debian') } @files;
 
         foreach my $file (@names) {
@@ -168,6 +169,65 @@ my $class = Module::Build->subclass(code => <<'EOC');
             }
 
         }
+
+    }
+
+    sub ACTION_post_install {
+        my $self = shift;
+
+        my $db;
+        my $fh;
+        my $ini;
+        my $base;
+
+        unless ($^O eq 'MSWin32') {
+
+            $base = defined($ENV{'XAS_ROOT'}) ? $ENV{'XAS_ROOT'} : '/';
+            $ini = catfile($base, 'etc', 'xas', 'database.ini');
+
+            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : '/var/xas/lib';
+            $db = catfile($base, 'messaging.db');
+
+        } else {
+
+            $base = defined($ENV{'XAS_ROOT'}) ? $ENV{'XAS_ROOT'} : 'C:\\XAS';
+            $ini = catfile($base, 'etc', 'database.ini');
+
+            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : 'C:\\XAS\lib;
+            $db = catfile($base, 'messaging.db');
+
+        }
+
+        if (open($fh, '+>>', $ini)) {
+
+            unless (grep( $_ =~ /messaging/, <$fh> )) {
+
+                seek($fh, 0, 2);
+                printf($fh, "\n");
+                printf($fh, "[messaging]\n");
+                printf($fh, "dbname = %s\n", $db):
+                printf($fh, "dsn = SQLite\n");
+                printf($fh, "\n");
+
+            }
+
+            close($fh);
+
+        } else {
+
+            warn sprintf("unable to open %s, reason: %s\n", $ini, $!);
+
+        }
+
+        unless (-f $db) {
+
+            system('/usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory .');
+            system('/usr/bin/sqlite3 $db < ./XAS-Collector-Schema-0.01-SQLite.sql');
+            unlink('XAS-Collector-Schema-0.01-SQLite.sql');
+
+        }
+
+        return $self;
 
     }
 
@@ -339,10 +399,10 @@ my $class = Module::Build->subclass(code => <<'EOC');
 EOC
 
 my $builder = $class->new(
-    module_name         => 'XAS-XXXX',
-    license             => 'perl',
+    module_name         => 'XAS-Collector',
+    license             => 'artistic_2',
     dist_author         => q{Kevin L. Esteb <kevin@kesteb.us>},
-    dist_version_from   => 'lib/XAS/XXXX.pm',
+    dist_version_from   => 'lib/XAS/Collector.pm',
     release_status      => 'stable',
     configure_requires => {
         'Module::Build' => 0,
@@ -350,14 +410,14 @@ my $builder = $class->new(
     build_requires => {
         'Test::More' => 0,
     },
-    add_to_cleanup     => [ 'XAS-XXXX-*' ],
+    add_to_cleanup     => [ 'XAS-Collector-*' ],
     create_makefile_pl => 'traditional',
     install_path       => $install_path,
     requires           => $requires
 );
 
 $builder->add_build_element('etc');
-$builder->add_build_element('msg');
+#$builder->add_build_element('msg');
 $builder->add_build_element('sbin');
 $builder->add_build_element('initd');
 $builder->add_build_element('sysconf');
