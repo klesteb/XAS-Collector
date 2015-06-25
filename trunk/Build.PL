@@ -193,7 +193,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
             $base = defined($ENV{'XAS_ROOT'}) ? $ENV{'XAS_ROOT'} : 'C:\\XAS';
             $ini = catfile($base, 'etc', 'database.ini');
 
-            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : 'C:\\XAS\lib;
+            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : 'C:\\XAS\lib';
             $db = catfile($base, 'messaging.db');
 
         }
