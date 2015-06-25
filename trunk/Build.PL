@@ -4,7 +4,7 @@ use Module::Build;
 
 my $requires = {
     'XAS' => '0.08',
-    'XAS-Model' => '0.01',
+    'XAS::Model' => '0.01',
 };
     
 my $sysconfig = ( -e '/etc/default' ) ? '/etc/default' : '/etc/sysconfig';
@@ -205,7 +205,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
                 seek($fh, 0, 2);
                 printf($fh, "\n");
                 printf($fh, "[messaging]\n");
-                printf($fh, "dbname = %s\n", $db):
+                printf($fh, "dbname = %s\n", $db);
                 printf($fh, "dsn = SQLite\n");
                 printf($fh, "\n");
 

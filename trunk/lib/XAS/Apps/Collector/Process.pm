@@ -8,7 +8,7 @@ use XAS::Collector::Connector;
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
-  base      => 'XAS::Lib::App::Services',
+  base      => 'XAS::Lib::App::Service',
   mixin     => 'XAS::Lib::Mixins::Configs',
   utils     => 'dotid trim load_module',
   accessors => 'host port cfg types',

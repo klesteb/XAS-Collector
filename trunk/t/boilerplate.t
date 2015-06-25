@@ -3,7 +3,14 @@
 use 5.006;
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More;
+
+unless ( $ENV{RELEASE_TESTING} ) {
+    plan( skip_all => "Author tests not required for installation" );
+} else {
+
+    plan tests => 13;
+}
 
 sub not_in_file_ok {
     my ($filename, %regex) = @_;
@@ -38,6 +45,7 @@ sub module_boilerplate_ok {
 }
 
 TODO: {
+
   local $TODO = "Need to replace the boilerplate text";
 
   not_in_file_ok(README =>
@@ -49,8 +57,16 @@ TODO: {
     "placeholder date/time"       => qr(Date/time)
   );
 
-  module_boilerplate_ok('lib/XAS/Spooler.pm');
-
+  module_boilerplate_ok('lib/XAS/Collector.pm');
+  module_boilerplate_ok('lib/XAS/Apps/Collector/Process.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Alerts/Database.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Alerts/Logstash.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Logs/Database.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Logs/Logstash.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Connector.pm');
+  module_boilerplate_ok('lib/XAS/Docs/Collector/Installation.pm');
+  module_boilerplate_ok('lib/XAS/Model/Database/Messaging/Result/Alert.pm');
+  module_boilerplate_ok('lib/XAS/Model/Database/Messaging/Result/Log.pm');
 
 }
 
