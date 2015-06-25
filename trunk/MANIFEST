@@ -20,6 +20,7 @@ lib/XAS/Collector/Alerts/Logstash.pm
 lib/XAS/Collector/Logs/Database.pm
 lib/XAS/Collector/Logs/Logstash.pm
 lib/XAS/Collector/Connector.pm
+lib/XAS/Docs/Collector/Installation.pm
 lib/XAS/Model/Database/Messaging/Result/Alert.pm
 lib/XAS/Model/Database/Messaging/Result/Log.pm
 logrotate.d/xas-collector
