@@ -112,7 +112,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
         # cleanup the init.d directory
 
         my $destdir = $self->destdir;
-        my @files = (''xas-collector'); 
+        my @files = ('xas-collector'); 
         my @names = map { catfile($destdir, 'etc', 'init.d', $_ . '.rhel') } @files;
 
         foreach my $file (@names) {
