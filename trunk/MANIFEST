@@ -23,6 +23,7 @@ lib/XAS/Collector/Connector.pm
 lib/XAS/Docs/Collector/Installation.pm
 lib/XAS/Model/Database/Messaging/Result/Alert.pm
 lib/XAS/Model/Database/Messaging/Result/Log.pm
+lib/XAS/Msgs/Collector.msg
 logrotate.d/xas-collector
 MANIFEST			This list of files
 perl-XAS-Collector.spec

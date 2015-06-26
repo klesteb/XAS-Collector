@@ -44,6 +44,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
     use File::Find;
     use File::Basename;
     use File::Spec::Functions qw( catfile catdir rel2abs );
+    use Data::Dumper;
 
     # override and add a few things
 
@@ -182,48 +183,49 @@ my $class = Module::Build->subclass(code => <<'EOC');
 
         unless ($^O eq 'MSWin32') {
 
-            $base = defined($ENV{'XAS_ROOT'}) ? $ENV{'XAS_ROOT'} : '/';
-            $ini = catfile($base, 'etc', 'xas', 'database.ini');
+            $base = defined($ENV{'XAS_ETC'}) ? $ENV{'XAS_ETC'} : '/etc/xas';
+            $ini = catfile($base, 'database.ini');
 
-            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : '/var/xas/lib';
+            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : '/var/lib/xas';
             $db = catfile($base, 'messaging.db');
 
         } else {
 
-            $base = defined($ENV{'XAS_ROOT'}) ? $ENV{'XAS_ROOT'} : 'C:\\XAS';
-            $ini = catfile($base, 'etc', 'database.ini');
+            $base = defined($ENV{'XAS_ETC'}) ? $ENV{'XAS_ETC'} : 'C:\\XAS\\etc';
+            $ini = catfile($base, 'database.ini');
 
-            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : 'C:\\XAS\lib';
+            $base = defined($ENV{'XAS_LIB'}) ? $ENV{'XAS_LIB'} : 'C:\\XAS\\lib';
             $db = catfile($base, 'messaging.db');
 
         }
 
-        if (open($fh, '+>>', $ini)) {
+        if (open($fh, '+<', $ini)) {
 
-            unless (grep( $_ =~ /messaging/, <$fh> )) {
+            my @x = grep( /\[messaging\]/, <$fh> );
+
+            unless (scalar(@x)) {
 
                 seek($fh, 0, 2);
-                printf($fh, "\n");
-                printf($fh, "[messaging]\n");
-                printf($fh, "dbname = %s\n", $db);
-                printf($fh, "dsn = SQLite\n");
-                printf($fh, "\n");
+                print $fh sprintf("\n");
+                print $fh sprintf("[messaging]\n");
+                print $fh sprintf("dbname = %s\n", $db);
+                print $fh sprintf("dsn = SQLite\n");
 
             }
 
             close($fh);
 
+            unless (-f $db) {
+
+                system('/usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory . 2>/dev/null');
+                system("/usr/bin/sqlite3 $db < ./XAS-Model-Schema-0.01-SQLite.sql 2>/dev/null");
+                unlink('./XAS-Model-Schema-0.01-SQLite.sql');
+
+            }
+
         } else {
 
             warn sprintf("unable to open %s, reason: %s\n", $ini, $!);
-
-        }
-
-        unless (-f $db) {
-
-            system('/usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory .');
-            system('/usr/bin/sqlite3 $db < ./XAS-Collector-Schema-0.01-SQLite.sql');
-            unlink('XAS-Collector-Schema-0.01-SQLite.sql');
 
         }
 
@@ -417,7 +419,7 @@ my $builder = $class->new(
 );
 
 $builder->add_build_element('etc');
-#$builder->add_build_element('msg');
+$builder->add_build_element('msg');
 $builder->add_build_element('sbin');
 $builder->add_build_element('initd');
 $builder->add_build_element('sysconf');

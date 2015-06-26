@@ -175,38 +175,97 @@ XAS::Collector::Alerts::Logstash - Send output to a logstash server
     -alias           => 'output-logstash',
     -port            => 9500,
     -host            => 'localhost',
-    -input           => 'stomp',
     -tcp_keepalive   => 1,
     -retry_reconnect => 1.
  );
  
 =head1 DESCRIPTION
 
-This module will open and maintain a connection to a logstash server.
+This module will open and maintain a connection to a logstash server. 
 
 =head1 METHODS
 
-=head2 initilize
+=head2 new
 
-Create an event named 'store_data'.
+This method initializes the module. This module inherits from 
+L<XAS::Lib::Net::POE::Client|XAS::Lib::Net::POE::Client> and uses the same
+parameters for new().
 
-=head2 connection_down
+=head1 EVENTS
+
+=head2 handle_connection(OBJECT)
+
+Notify the input session that the connection to logstash is up.
+
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=back
+
+=head2 connection_down(OBJECT)
 
 An event to notify the input session that the logstash connection
 is currently down.
 
-=head2 store_data
+=over 4
 
-An event to recieve a data packet and an ack. The data packet is sent
+=item B<OBJECT>
+
+A handle to the current object.
+
+=back
+
+=head2 connection_up(OBJECT)
+
+An event to notify the input session that the logstash connection is up.
+
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=back
+
+=head2 store_data(OBJECT, ARG0, ARG1)
+
+this event recieves a data packet and an ack. The data packet is sent
 to the logstash server and the ack is sent to the input session.
 
-=head2 read_data
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=item B<ARG0>
+
+The data to send to logstash.
+
+=item B<ARG1>
+
+The acknowledgement to send back to the message queue server.
+
+=back
+
+=head2 read_data(OBJECT, ARG0)
 
 Read any data from logstash. Log the input to the log file.
 
-=head2 handle_connection
+=over 4
 
-Notify the input session that the connection to logstash is up.
+=item B<OBJECT>
+
+A handle to the current object.
+
+=item B<ARG0>
+
+The data received from logstaeh.
+
+=back
 
 =head1 SEE ALSO
 

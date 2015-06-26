@@ -94,3 +94,209 @@ sub table_name {
 }
 
 1;
+
+__END__
+ 
+=head1 NAME
+
+XAS::Model::Database::XXXX::Result::XXXX - Table for XAS Log entries
+
+=head1 DESCRIPTION
+
+The definition for the log table.
+
+=head1 FIELDS
+
+=head2 id
+
+An automatic incremental index.
+
+=over 4
+
+=item B<data type> - bigint
+
+=item B<is nullable> - no
+
+=back
+
+=head2 hostname
+
+The name of the host that the entry is from.
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 254
+
+=item B<is nullable> - no
+
+=back
+
+=head2 datetime
+
+The date and time when the record was created. 
+
+=over 4
+
+=item B<data type> - timestamp with time zone
+ 
+=item B<timezone> - local
+
+=item B<is nullable> - no
+
+=back
+
+=head2 level
+
+The level of the alert. 
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 32
+
+=item B<is nullable> - no
+
+=back
+
+=head2 facility
+
+The facility of the alert. 
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 32
+
+=item B<is nullable> - no
+
+=back
+
+=head2 process
+
+The name of the process that generated the alert. 
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 32
+
+=item B<is nullable> - no
+
+=back
+
+=head2 message
+
+The message. 
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 256
+
+=item B<is nullable> - no
+
+=back
+
+=head2 pid
+
+The process id of process that generated the alert. 
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 16
+
+=item B<is nullable> - no
+
+=back
+
+=head2 tid
+
+The id for the thread of the process that generated the alert. 
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 32
+
+=item B<is nullable> - no
+
+=back
+
+=head2 msgnum
+
+The message number of the message for the alert.
+
+=over 4
+
+=item B<data type> - varchar
+ 
+=item B<size> - 16
+
+=item B<is nullable> - no
+
+=back
+
+=head2 revision
+
+Used by L<DBIx::Class::OptimisticLocking|https://metacpan.org/pod/DBIx::Class::Optimisticlocking>
+to manage changes for this record.
+
+=over 4
+
+=item B<data type> - integer
+ 
+=item B<is nullable> - yes
+
+=back
+
+=head1 METHODS
+
+=head2 sqlt_deploy_hook($sqlt_table)
+
+This method is used when a database schema is being generated. It can be used
+to add additional features.
+
+=over 4
+
+=item B<$sqlt_table>
+
+The DBIx::Class class for this table.
+
+=back
+
+=head2 table_name
+
+Used by the helper functions mixed in from L<XAS::Model::DBM|XAS::Model::DBM>.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<XAS::Collector|XAS::Collector>
+
+=item L<XAS|XAS>
+
+=back
+
+=head1 AUTHOR
+
+Kevin L. Esteb, <kevin@kesteb.us>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) 2015 Kevin L. Esteb
+
+This is free software; you can redistribute it and/or modify it under
+the terms of the Artistic License 2.0. For details, see the full text
+of the license at http://www.perlfoundation.org/artistic_license_2_0.
+
+=cut

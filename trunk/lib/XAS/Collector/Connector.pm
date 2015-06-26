@@ -17,6 +17,7 @@ use XAS::Class
   vars => {
     PARAMS => {
       -types  => { type => ARRAYREF },
+      -alias  => { optional => 1, default => 'connector' },
     }
   }
 ;
@@ -202,7 +203,7 @@ __END__
 
 =head1 NAME
 
-XAS::Connector - Perl extension for the XAS environment
+XAS::Collector::Connector - Perl extension for the XAS environment
 
 =head1 SYNOPSIS
 
@@ -212,17 +213,12 @@ XAS::Connector - Perl extension for the XAS environment
      { 'xas-alert', 'alert' },
   ];
 
-  my $queues = [
-      '/queue/alert',
-  ];
-
-  XAS::Collector::Connector->new(
+  my $connector = XAS::Collector::Connector->new(
       -host     => $host,
       -port     => $port,
-      -alias    => 'collector',
+      -alias    => 'connector',
       -login    => 'collector',
       -passcode => 'ddc',
-      -queues   => $queues,
       -types    => $types
   );
 
@@ -235,15 +231,10 @@ are received, they are then passed off to the appropriate message handler.
 
 =head2 new
 
-The module uses the configuration items from L<XAS::Lib::Stomp::POE::Client|XAS::Lib::Stomp::POE::Client>
-along with this additional items.
+The module inherits from L<XAS::Lib::Stomp::POE::Client|XAS::Lib::Stomp::POE::Client>
+and adds these additional parameters:
 
 =over 4 
-
-=item B<-queues>
-
-The queues that the connector will subscribe too. This can be a string or
-an array of strings.
 
 =item B<-types>
 
@@ -255,49 +246,85 @@ the session handler for that packet type.
 
 =head1 PUBLIC EVENTS
 
-=head2 handle_connected($kernel, $self, $frame)
-
-Subscribe to the appropriate queue(s) after authentication.
-
-=over 4
-
-=item B<$kernel>
-
-A handle to the POE kernel
-
-=item B<$self>
-
-A handle to the current object.
-
-=item B<$frame>
-
-The received STOMP frame.
-
-=back
-
-=head2 handle_message($kernel, $self, $frame)
+=head2 handle_message(OBJECT, ARG0)
 
 Decode the packet type and pass it off to the appropriate message handler.
 
 =over 4
 
-=item B<$kernel>
-
-A handle to the POE kernel
-
-=item B<$self>
+=item B<OBJECT>
 
 A handle to the current object.
 
-=item B<$frame>
+=item B<ARG0>
 
 The received STOMP frame.
+
+=back
+
+=head2 connection_down(OBJECT)
+
+Mark the connection to message queue server as down.
+
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=back
+
+=head2 connection_up(OBJECT)
+
+Mark the connection to message queue server as up.
+
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=back
+
+=head2 stop_queue(OBJECT, ARG0)
+
+Stop processing the specified queue.
+
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=item B<ARG0>
+
+A hash reference, where the memeber '-queue' contains the name of the
+queue to stop procesing.
+
+=back
+
+=head2 start_queue(OBJECT, ARG0)
+
+Start processing the specified queue.
+
+=over 4
+
+=item B<OBJECT>
+
+A handle to the current object.
+
+=item B<ARG0>
+
+A hash reference, where the memeber '-queue' contains the name of the
+queue to start procesing.
 
 =back
 
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Colletor|XAS::Collector>
 
 =item L<XAS|XAS>
 
