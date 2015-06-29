@@ -102,7 +102,7 @@ sub init {
 
     my $self = $class->SUPER::init(@_);
 
-    $self->load_configs();
+    $self->load_config();
 
     return $self;
 
