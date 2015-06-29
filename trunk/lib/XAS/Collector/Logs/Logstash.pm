@@ -37,7 +37,7 @@ sub handle_connection {
 
     if ($self->tcp_keepalive) {
 
-        $self->log->info('tcp_keepalive_enabled' $alias);
+        $self->log->info('tcp_keepalive_enabled', $alias);
 
         $self->init_keepalive(-tcp_keepidle => 100);
         $self->enable_keepalive($self->socket);
