@@ -7,8 +7,15 @@
 #
 
 [messages]
-send       = %s: sent packet to logstash
-down       = %s: the logstash connection is down
-up         = %s: the logstash connection is up
-connected  = %s: connected to %s on %s
-unknownmsg = %s: unknown protocol type: %s
+collector_send         = %s: sent packet to logstash
+collector_down         = %s: the logstash connection is down
+collector_up           = %s: the logstash connection is up
+collector_connected    = %s: connected to %s on %s
+collector_unknownmsg   = %s: unknown protocol type: %s
+collector_subscribed   = %s: subscribed to %s
+collector_receipts     = %s: received a receipt %s
+collector_unsubscribed = %s: unsubscribed from %s
+collector_errors       = %s: received an error %s, message: %s, reason: %s
+collector_unknowntype  = %s: unknown packet type: %s
+collector_received     = %s: recieved message %s, type: "%s" from %s
+collector_processed    = %s: processed %s items from: %s; time: %s

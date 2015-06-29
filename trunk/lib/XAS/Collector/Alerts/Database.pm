@@ -57,7 +57,7 @@ sub store_data {
 
         Alerts->create($schema, $rec);
 
-        $self->log->info_msg('processed', $alias, 1, $data->{hostname}, $data->{datetime});
+        $self->log->info_msg('collector_processed', $alias, 1, $data->{hostname}, $data->{datetime});
 
     } catch {
 

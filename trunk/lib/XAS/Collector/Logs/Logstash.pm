@@ -37,14 +37,14 @@ sub handle_connection {
 
     if ($self->tcp_keepalive) {
 
-        $self->log->info("$alias: tcp_keepalive enabled");
+        $self->log->info('tcp_keepalive_enabled' $alias);
 
         $self->init_keepalive(-tcp_keepidle => 100);
         $self->enable_keepalive($self->socket);
 
     }
 
-    $self->log->info_msg('connected', $alias, $self->host, $self->port);
+    $self->log->info_msg('collector_connected', $alias, $self->host, $self->port);
     $poe_kernel->post($alias, 'connection_up');
 
 }
@@ -71,7 +71,7 @@ sub store_data {
 
         my $packet = encode($data);
 
-        $self->log->info_msg('send', $alias);
+        $self->log->info_msg('collector_send', $alias);
         $poe_kernel->call($alias, 'write_data', $packet);
 
     } catch {
@@ -95,7 +95,7 @@ sub connection_down {
     my $alias = $self->alias;
     my $queue = $self->queue;
 
-    $self->log->warn_msg('down', $alias);
+    $self->log->warn_msg('collector_down', $alias);
 
     $self->events->publish(
         -event => 'stop_queue',
@@ -112,7 +112,7 @@ sub connection_up {
     my $alias = $self->alias;
     my $queue = $self->queue;
 
-    $self->log->warn_msg('up', $alias);
+    $self->log->warn_msg('collector_up', $alias);
 
     $self->events->publish(
         -event => 'start_queue',

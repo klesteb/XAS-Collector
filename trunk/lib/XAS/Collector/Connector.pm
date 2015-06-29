@@ -45,7 +45,7 @@ sub handle_message {
 
         $message = decode($frame->body);
 
-        $self->log->info_msg('received', 
+        $self->log->info_msg('collector_received', 
             $alias, 
             $message_id, 
             $message->{type}, 
@@ -63,7 +63,7 @@ sub handle_message {
 
             $self->throw_msg(
                 'xas.collector.connector.handle_message',
-                'unknownmsg',
+                'collector_unknowntype',
                 $alias, $message->{type}
             );
 
@@ -110,7 +110,7 @@ sub start_queue {
             -ack         => 'client'
         );
 
-        $self->log->info_msg('subscribed', $alias, $queue);
+        $self->log->info_msg('collector_subscribed', $alias, $queue);
         $poe_kernel->post($alias, 'write_data', $frame);
 
     } else {
@@ -133,7 +133,7 @@ sub stop_queue {
             -destination => $queue,
         );
 
-        $self->log->info_msg('unsubscribed', $alias, $queue);
+        $self->log->info_msg('collector_unsubscribed', $alias, $queue);
         $poe_kernel->post($alias, 'write_data', $frame);
 
     }
