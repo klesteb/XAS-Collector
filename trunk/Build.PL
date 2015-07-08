@@ -3,9 +3,9 @@ use warnings FATAL => 'all';
 use Module::Build;
 
 my $requires = {
-    'perl'       => 5.8.8,
-    'XAS'        => '0.08',
-    'XAS::Model' => '0.01',
+    'perl'       => 5.008_08,
+    'XAS'        => 0.08,
+    'XAS::Model' => 0.01,
 };
     
 my $sysconfig = ( -e '/etc/default' ) ? '/etc/default' : '/etc/sysconfig';
