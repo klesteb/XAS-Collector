@@ -3,7 +3,8 @@ use warnings FATAL => 'all';
 use Module::Build;
 
 my $requires = {
-    'XAS' => '0.08',
+    'perl'       => 5.8.8,
+    'XAS'        => '0.08',
     'XAS::Model' => '0.01',
 };
     
@@ -411,6 +412,12 @@ my $builder = $class->new(
     },
     build_requires => {
         'Test::More' => 0,
+    },
+    meta_add => {
+        resources => {
+            homepage   => 'http://scm.kesteb.us/trac',
+            repository => 'http://scm.kesteb.us/git/XAS-Collector',
+        },
     },
     add_to_cleanup     => [ 'XAS-Collector-*' ],
     create_makefile_pl => 'traditional',
