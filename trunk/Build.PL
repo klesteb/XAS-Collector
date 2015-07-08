@@ -402,7 +402,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
 EOC
 
 my $builder = $class->new(
-    module_name         => 'XAS-Collector',
+    module_name         => 'XAS::Collector',
     license             => 'artistic_2',
     dist_author         => q{Kevin L. Esteb <kevin@kesteb.us>},
     dist_version_from   => 'lib/XAS/Collector.pm',
