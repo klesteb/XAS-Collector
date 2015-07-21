@@ -19,3 +19,7 @@ collector_errors       = %s: received an error %s, message: %s, reason: %s
 collector_unknowntype  = %s: unknown packet type: %s
 collector_received     = %s: recieved message %s, type: "%s" from %s
 collector_processed    = %s: processed %s items from: %s; time: %s
+collector_pausing      = %s: pausing queue %s
+collector_resuming     = %s: resuming queue %s
+collector_notype       = %s: no message type defined
+collector_waiting      = %s: waiting for connection

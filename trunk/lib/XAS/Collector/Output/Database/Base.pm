@@ -1,4 +1,4 @@
-package XAS::Collector::Logs::Database;
+package XAS::Collector::Output::Database::Base;
 
 our $VERSION = '0.01';
 
@@ -7,23 +7,16 @@ use Try::Tiny;
 use XAS::Model::Schema;
 use XAS::Lib::POE::PubSub;
 
-use XAS::Model::Database
-  schema => 'XAS::Model::Database::Messaging',
-  table  => 'Log'
-;
-
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::POE::Service',
   mixin     => 'XAS::Lib::Mixins::Handlers',
   utils     => 'db2dt',
-  accessors => 'schema events',
+  accessors => 'schema event',
   vars => {
     PARAMS => {
-      -connector => 1,
-      -queue     => 1,
-      -database  => { optional => 1, default => 'messaging' },
+      -database => { optional => 1, default => 'messaging' },
     }
   }
 ;
@@ -33,45 +26,6 @@ use XAS::Class
 # --------------------------------------------------------------------
 # Public Events
 # --------------------------------------------------------------------
-
-sub store_data {
-    my ($self, $data, $ack) = @_[OBJECT,ARG0,ARG1];
-
-    my $buffer;
-    my $alias = $self->alias;
-    my $schema = $self->schema;
-    my $connector = $self->connector;
-
-    $self->log->debug("$alias: entering store_data()");
-
-    $buffer = sprintf("%s: hostname = %s; timestamp = %s; priority = %s; facility = %s; message = %s",
-        $alias, $data->{hostname}, $data->{datetime}, $data->{priority}, 
-        $data->{facility}, $data->{message}
-    );
-
-    $self->log->debug($buffer);
-
-    try {
-
-        my $rec = $self->format_data($data);
-
-        Log->create($schema, $rec);
-
-        $self->log->info_msg('collector_processed', $alias, 1, $data->{hostname}, $data->{datetime});
-
-    } catch {
-
-        my $ex = $_;
-
-        $self->exception_handler($ex);
-
-    };
-
-    $poe_kernel->post($connector, 'send_data', $ack);
-
-    $self->log->debug("$alias: leaving store_notify()");
-
-}
 
 # --------------------------------------------------------------------
 # Public Methods
@@ -103,7 +57,7 @@ sub session_startup {
     $self->log->debug("$alias: entering session_startup()");
 
     $self->events->publish(
-        -event => 'start_queue',
+        -event => 'resume_processing',
         -args  => { 
             '-queue' => $queue 
         }
@@ -117,33 +71,6 @@ sub session_startup {
 
 }
 
-sub format_data {
-    my $self = shift;
-    my ($data) = $self->validate_params(\@_, [1]);
-
-    my $alias  = $self->alias;
-
-    $self->log->debug("$alias: formatter");
-
-    my $dt = db2dt($data->{datetime});
-    my $rec = {
-        datetime   => $dt->strftime('%Y-%m-%dT%H:%M:%S.%3N%z'),
-        hostname   => $data->{hostname},
-        type       => $data->{type},
-        level      => $data->{priority},
-        facility   => $data->{facility},
-        process    => $data->{process},
-        message    => $data->{message},
-        pid        => $data->{pid},
-        tid        => $data->{tid},
-        msgnum     => $data->{msgnum},
-        revisison  => 1,
-    };
-
-    return $rec;
-
-}
-
 # --------------------------------------------------------------------
 # Private Methods
 # --------------------------------------------------------------------
@@ -153,7 +80,7 @@ sub init {
 
     my $self = $class->SUPER::init(@_);
 
-    $self->{events} = XAS::Lib::POE::PubSub->new();
+    $self->{event}  = XAS::Lib::POE::PubSub->new();
     $self->{schema} = XAS::Model::Schema->opendb($self->database);
 
     return $self;
@@ -166,33 +93,33 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Logs::Database - Perl extension for the XAS Environment
+XAS::Collector::Alerts::Database - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
   use XAS::Collector::Connector;
-  use XAS::Collector::Logs::Database;
+  use XAS::Collector::Alerts::Database;
 
   main: {
 
       my $types = [
-          {'xas-logs', 'logs'}
+          {'xas-alert', 'alert'}
       ];
 
       my $connector = XAS::Collector::Connector->new(
+          -alias         => 'connector',
           -host          => $host,
           -port          => $port,
           -tcp_keepalive => 1,
-          -alias         => 'connector',
-          -login         => 'xas',
-          -passcode      => 'xas',
+          -login         => 'guest',
+          -passcode      => 'guest',
           -types         => $types
       );
 
-      my $notify = XAS::Collector::Logs->Database->new(
-          -alias     => 'logs',
-          -connector => 'connector'
-          -queue     => '/queue/logs',
+      my $notify = XAS::Collector::Alerts::Database->new(
+          -alias     => 'alert',
+          -connector => 'connector',
+          -queue     => '/queue/alerts',
       );
 
       $poe_kernel->run();
@@ -203,7 +130,7 @@ XAS::Collector::Logs::Database - Perl extension for the XAS Environment
 
 =head1 DESCRIPTION
 
-This module handles the xas-logs packet type.
+This module handles the xas-alert packet type.
 
 =head1 METHODS
 

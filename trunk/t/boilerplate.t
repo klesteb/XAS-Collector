@@ -8,8 +8,7 @@ use Test::More;
 unless ( $ENV{RELEASE_TESTING} ) {
     plan( skip_all => "Author tests not required for installation" );
 } else {
-
-    plan tests => 13;
+    plan tests => 15;
 }
 
 sub not_in_file_ok {
@@ -59,11 +58,16 @@ TODO: {
 
   module_boilerplate_ok('lib/XAS/Collector.pm');
   module_boilerplate_ok('lib/XAS/Apps/Collector/Process.pm');
-  module_boilerplate_ok('lib/XAS/Collector/Alerts/Database.pm');
-  module_boilerplate_ok('lib/XAS/Collector/Alerts/Logstash.pm');
-  module_boilerplate_ok('lib/XAS/Collector/Logs/Database.pm');
-  module_boilerplate_ok('lib/XAS/Collector/Logs/Logstash.pm');
-  module_boilerplate_ok('lib/XAS/Collector/Connector.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Input/Stomp.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Formatter/Base.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Formatter/Alerts.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Formatter/Logs.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Database/Base.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Database/Alerts.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Database/Logs.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Socket/Base.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Socket/Logstash.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Socket/OpenTSDB.pm');
   module_boilerplate_ok('lib/XAS/Docs/Collector/Installation.pm');
   module_boilerplate_ok('lib/XAS/Model/Database/Messaging/Result/Alert.pm');
   module_boilerplate_ok('lib/XAS/Model/Database/Messaging/Result/Log.pm');

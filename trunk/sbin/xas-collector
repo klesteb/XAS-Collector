@@ -13,8 +13,6 @@
 # ENVIRONMENT: XAS Environment
 #
 # PARAMETERS:  
-#              --host         the host to attach too
-#              --port         the port to send too
 #              --logfile      the log file to use
 #              --log-type     the type of log file
 #              --log-facility the facility class of the log
@@ -65,8 +63,6 @@ xas-collector [--help] [--debug] [--manual] [--version]
 
  options:
 
-    --host         the host to attach too
-    --port         the port to send too
     --logfile      the log file to use
     --log-type     the type of log file
     --log-facility the facility class of the log
@@ -83,20 +79,52 @@ xas-collector [--help] [--debug] [--manual] [--version]
 
 =head1 DESCRIPTION
 
-This procdure will collect alert data from the message queue and store 
-it into a database.
+This procedure monitors queues on the the message queue server and process
+any entries on those queues. This uses a configuration file to load the
+specific modules needed to do this task.
+
+=head1 CONFIGURATION
+
+The configuration file is the familiar Windows .ini format. It has the 
+following stanzas.
+
+ [collector: input]
+ module = XAS::Collector::Input::Stomp
+ port = 61613
+ host = localhost
+ alias = input-stomp
+
+This stanza defines an input for the collector. There can be multiple. The
+"input" in thae stanzas name must be unique. The "module" is what to load and
+subsequent parameters are used by that module for initialization. They don't
+need a preceeding "-".
+
+ [collector: output]
+ module = XAS::Collector::Output::Socket::Logstash
+ port = 9500
+ host = localhost
+ alias = output-logstash
+
+This stanza defines an output for the collector. There can be multiple. The
+"output" in the stanzas name must be unique. The "module" is what to load and
+subsequent parameters are used by that module for initialization. They don't
+need a preceeding "-".
+
+ [collector: xas-alerts]
+ module = XAS::Collector::Formatter::Alerts
+ alias = format-alerts
+ queue = /queue/alerts
+ output = output-logstash
+
+This stanza defines a formatter for the collector. There can be multiple. The
+'wise-notify' is a known message type. It is also used by inputs to forward
+message types to the correct formatters. The "queue" is what queue the inputs
+should monitor and "output" is the alias of the outputer to send the formatted
+data too.
 
 =head1 OPTIONS AND ARGUMENTS
 
 =over 4
-
-=item B<--host>
-
-Where the Message Queue server resides.
-
-=item B<--port>
-
-The port for that server.
 
 =item B<-cfgfile>
 

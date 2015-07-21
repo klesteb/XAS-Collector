@@ -2,22 +2,20 @@ package XAS::Apps::Collector::Process;
 
 our $VERSION = '0.01';
 
-use Try::Tiny;
-use XAS::Collector::Connector;
-
 use XAS::Class
-  debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::App::Service',
   mixin     => 'XAS::Lib::Mixins::Configs',
-  utils     => 'dotid trim load_module',
-  accessors => 'host port cfg types',
+  utils     => 'dotid load_module trim',
+  accessors => 'cfg',
   vars => {
     SERVICE_NAME         => 'XAS_Collector',
     SERVICE_DISPLAY_NAME => 'XAS Collector',
-    SERVICE_DESCRIPTION  => 'The XAS Collector',
+    SERVICE_DESCRIPTION  => 'The XAS Collector'
   }
 ;
+
+#use Data::Dumper;
 
 # ----------------------------------------------------------------------
 # Public Methods
@@ -26,30 +24,84 @@ use XAS::Class
 sub setup {
     my $self = shift;
 
+    my @args;
     my @sections = $self->cfg->Sections();
 
     foreach my $section (@sections) {
 
+        next if ($section =~ /^collector:\s+input/);
+        next if ($section =~ /^collector:\s+output/);
         next if ($section !~ /^collector:/);
 
-        my ($alias) = $section =~ /^collector:(.*)/;
-        my $queue   = $self->cfg->val($section, 'queue');
-        my $module  = $self->cfg->val($section, 'module');
-        my $type    = $self->cfg->val($section, 'packet-type');
+        my ($type) = $section =~ /^collector:(.*)/;
 
-        $alias = trim($alias);
+        my $module = $self->cfg->val($section, 'module');
+        my $alias  = $self->cfg->val($section, 'alias');
+        my $queue  = $self->cfg->val($section, 'queue');
+        my $output = $self->cfg->val($section, 'output');
+
+        $self->{types}->{trim($type)} = {
+            queue  => $queue,
+            format => $alias,
+            output => $output
+        };
 
         load_module($module);
+        $module->new(-alias => $alias);
 
-        my $collector = $module->new(
-            -alias     => $alias,
-            -connector => 'connector',
-            -queue     => $queue,
-        );
+    }
 
-        push(@{$self->{types}}, {
-            'packet-type' => $alias
-        });
+    foreach my $section (@sections) {
+
+        next if ($section !~ /^collector:\s+input/);
+        next if ($section !~ /^collector:/);
+
+        @args = ();
+
+        my $module = $self->cfg->val($section, 'module');
+        my $alias  = $self->cfg->val($section, 'alias');
+
+        push(@args, '-types', $self->{types});
+
+        my @parameters = $self->cfg->Parameters($section);
+
+        foreach my $parameter (@parameters) {
+
+            next if ($parameter eq 'module');
+
+            push(@args, "-$parameter", $self->cfg->val($section, $parameter));
+
+        }
+
+        load_module($module);
+        $module->new(@args);
+
+        $self->service->register($alias);
+
+    }
+
+    foreach my $section (@sections) {
+
+        next if ($section !~ /^collector:\s+output/);
+        next if ($section !~ /^collector:/);
+
+        @args = ();
+
+        my $module = $self->cfg->val($section, 'module');
+        my $alias  = $self->cfg->val($section, 'alias');
+
+        my @parameters = $self->cfg->Parameters($section);
+
+        foreach my $parameter (@parameters) {
+
+            next if ($parameter eq 'module');
+
+            push(@args, "-$parameter", $self->cfg->val($section, $parameter));
+
+        }
+
+        load_module($module);
+        $module->new(@args);
 
         $self->service->register($alias);
 
@@ -62,34 +114,11 @@ sub main {
 
     $self->setup();
 
-    my $connection = XAS::Collector::Connector->new(
-        -alias           => 'connector',
-        -host            => $self->host,
-        -port            => $self->port,
-        -tcp_keepalive   => 1,
-        -retry_reconnect => 1,
-        -types           => $self->types,
-    );
-
     $self->log->info_msg('startup');
 
-    $self->service->register('connector');
     $self->service->run();
 
     $self->log->info_msg('shutdown');
-
-}
-
-sub options {
-    my $self = shift;
-
-    $self->{port} = $self->env->mqport;
-    $self->{host} = $self->env->mqserver;
-
-    return {
-        'port=s' => \$self->{port},
-        'host=s' => \$self->{host},
-    };
 
 }
 
@@ -102,7 +131,7 @@ sub init {
 
     my $self = $class->SUPER::init(@_);
 
-    $self->load_config();
+    $self->load_configs();
 
     return $self;
 
@@ -110,64 +139,60 @@ sub init {
 
 1;
 
+# [collector: input]
+# module = XAS::Collector::Input::Stomp
+# port = 61613
+# host = localhost
+# alias = input-stomp
+#
+# [collector: output]
+# module = XAS::Collector::Output::Logstash
+# port = 9500
+# host = localhost
+# alias = output-logstash
+#
+# [collector: wise-notify]
+# formatter = XAS::Collector::Formatter::Alerts
+# alias = wpm-notify
+# queue = /queue/alerts
+# output = output-logstash
+#
+
 __END__
 
 =head1 NAME
 
-XAS::Apps::Collector::Process - This module will process alerts
+XAS::Apps::Collector::Alerts - A class for the XAS environment
 
 =head1 SYNOPSIS
 
- use XAS::Apps::Collector::Process;
+ use XAS::Apps::Collector::Alerts;
 
- my $app = XAS::Apps::Collector::Process->new(
-     -throws => 'xas-collector',
- );
+ my $app = XAS::Apps::Collector::Alerts->new();
 
- exit $app->run();
+ $app->run();
 
 =head1 DESCRIPTION
 
-This module will process alerts from the message queue. It inherits from
-L<XAS::Lib::App::Services|XAS::Lib::App::Services>.
+This module will retrieve 'xas-alerts' packets from the message queue,
+convert the format to a logstash 'json_event' and forward it to logstash
+for storage in Elasticsearch.
 
-=head1 CONFIGURATION
+=head1 METHODS
 
-This module reads a configuration file. The default is <XAS_ROOT>/etc/<$0>.ini,
-this can be overridden with the --cfgfile cli option. The configuration file 
-has the following format:
+=head2 setup
 
-    [collector: alert]
-    queue = /queue/alert
-    packet-type = xas-alert
-    module = XAS::Messaging::Collector::Alert
+=head2 main
 
-This uses the standard .ini format. The entries mean the following:
-
-    [controller: xxxx] - The beginning of the stanza.
-    queue              - The message queue to listen on, defaults to '/queue/xas'.
-    packet-type        - The message type expected.
-    module             - The module that handles that message type.
-
-=head1 OPTIONS
-
-This modules provides these additonal cli options.
-
-=head2 --host
-
-This is the host that the message queue is on.
-
-=head2 --port
-
-This is the port that it listens on.
+=head2 options
 
 =head1 SEE ALSO
 
 =over 4
 
-=item sbin/xas-collector
-
 =item L<XAS|XAS>
+
+=item L<XAS::Collector>
 
 =back
 
