@@ -57,7 +57,7 @@ sub session_startup {
     $self->log->debug("$alias: entering session_startup()");
 
     $self->event->publish(
-        -event => 'resume_processing',
+        -event => 'start_queue',
         -args  => { 
             '-queue' => $queue 
         }
