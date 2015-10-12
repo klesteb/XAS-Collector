@@ -8,7 +8,7 @@ use Try::Tiny;
 use XAS::Class
   debug   => 0,
   version => $VERSION,
-  base    => 'XAS::Collectore::Formatter::Base',
+  base    => 'XAS::Collector::Formatter::Base',
   utils   => 'db2dt',
 ;
 

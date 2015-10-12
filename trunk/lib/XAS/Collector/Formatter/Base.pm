@@ -7,7 +7,7 @@ use POE;
 use XAS::Class
   debug   => 0,
   version => $VERSION,
-  base    => 'XAS::Lib::Session',
+  base    => 'XAS::Lib::POE::Session',
 ;
 
 # ----------------------------------------------------------------------
