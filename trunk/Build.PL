@@ -216,13 +216,13 @@ my $class = Module::Build->subclass(code => <<'EOC');
 
             close($fh);
 
-            unless (-f $db) {
+#            unless (-f $db) {
 
-                system('/usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory . 2>/dev/null');
-                system("/usr/bin/sqlite3 $db < ./XAS-Model-Schema-0.01-SQLite.sql 2>/dev/null");
-                unlink('./XAS-Model-Schema-0.01-SQLite.sql');
+#                system('/usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory . 2>/dev/null');
+#                system("/usr/bin/sqlite3 $db < ./XAS-Model-Schema-0.01-SQLite.sql 2>/dev/null");
+#                unlink('./XAS-Model-Schema-0.01-SQLite.sql');
 
-            }
+#            }
 
         } else {
 
