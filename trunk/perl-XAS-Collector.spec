@@ -73,12 +73,12 @@ then
     echo "dbname = /usr/lib/xas/messaging.db" >> /etc/xas/database.ini
     echo "dsn = SQLite" >> /etc/xas/database.ini
 fi
-if [ ! -f /var/lib/xas/messaging.db ]
-then
-    /usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory /tmp 2>/dev/null;
-    /usr/bin/sqlite3 /var/lib/xas/messaging.db < /tmp/XAS-Model-Schema-0.01-SQLite.sql 2>/dev/null || true
-    rm -f /tmp/XAS-Model-Schema-0.01-SQLite.sql
-fi
+#if [ ! -f /var/lib/xas/messaging.db ]
+#then
+#    /usr/bin/xas-create-schema --schema XAS::Model::Database::Messaging --directory /tmp 2>/dev/null;
+#    /usr/bin/sqlite3 /var/lib/xas/messaging.db < /tmp/XAS-Model-Schema-0.01-SQLite.sql 2>/dev/null || true
+#    rm -f /tmp/XAS-Model-Schema-0.01-SQLite.sql
+#fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
