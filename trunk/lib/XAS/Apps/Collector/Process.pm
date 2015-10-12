@@ -28,6 +28,8 @@ sub setup {
     my @args;
     my @sections = $self->cfg->Sections();
 
+    # formatters
+
     foreach my $section (@sections) {
 
         next if ($section =~ /^collector:\s+input/);
@@ -51,6 +53,8 @@ sub setup {
         $module->new(-alias => $alias);
 
     }
+
+    # inputers
 
     foreach my $section (@sections) {
 
@@ -80,6 +84,8 @@ sub setup {
         $self->service->register($alias);
 
     }
+
+    # outputers
 
     foreach my $section (@sections) {
 

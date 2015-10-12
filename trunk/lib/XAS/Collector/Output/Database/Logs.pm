@@ -13,7 +13,7 @@ use XAS::Model::Database
 use XAS::Class
   debug   => 0,
   version => $VERSION,
-  base    => 'XAS::Lib::POE::Service',
+  base    => 'XAS::Collector::Output::Database::Base',
 ;
 
 #use Data::Dumper;
