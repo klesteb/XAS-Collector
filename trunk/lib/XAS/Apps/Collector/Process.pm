@@ -25,8 +25,6 @@ use XAS::Class
 sub setup {
     my $self = shift;
 
-    $self->service->run();     # pre-init POE
-
     my @args;
     my @sections = $self->cfg->Sections();
 
@@ -160,7 +158,7 @@ sub init {
 # host = localhost
 # alias = output-logstash
 #
-# [collector: wise-notify]
+# [collector: xas-alerts]
 # formatter = XAS::Collector::Formatter::Alerts
 # alias = wpm-notify
 # queue = /queue/alerts
