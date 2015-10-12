@@ -25,6 +25,8 @@ use XAS::Class
 sub setup {
     my $self = shift;
 
+    $self->service->run();     # pre-init POE
+
     my @args;
     my @sections = $self->cfg->Sections();
 
