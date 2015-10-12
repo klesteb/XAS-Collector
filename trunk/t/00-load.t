@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 12;
+use Test::More tests => 15;
 
 BEGIN {
     use_ok( 'XAS::Apps::Collector::Process' )            || print "Bail out!\n";
