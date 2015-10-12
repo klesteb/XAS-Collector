@@ -5,11 +5,12 @@ our $VERSION = '0.03';
 use POE;
 use Try::Tiny;
 use XAS::Lib::POE::PubSub;
-use Params::Validate 'HASHREF';
+use Params::Validate qw(HASHREF);
 
 use XAS::Class
+  debug     => 0,
   version   => $VERSION,
-  base      => 'XAS::Lib::Net::Client::Stomp',
+  base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
   utils     => 'dotid',
   codec     => 'JSON',

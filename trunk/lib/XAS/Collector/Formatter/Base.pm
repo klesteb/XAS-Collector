@@ -5,6 +5,7 @@ our $VERSION = '0.01';
 use POE;
 
 use XAS::Class
+  debug   => 0,
   version => $VERSION,
   base    => 'XAS::Lib::Session',
 ;

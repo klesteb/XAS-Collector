@@ -6,6 +6,7 @@ use POE;
 use Try::Tiny;
 
 use XAS::Class
+  debug   => 0,
   version => $VERSION,
   base    => 'XAS::Collector::Output::Socket::Base',
   codec   => 'JSON',

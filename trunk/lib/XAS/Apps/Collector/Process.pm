@@ -3,6 +3,7 @@ package XAS::Apps::Collector::Process;
 our $VERSION = '0.01';
 
 use XAS::Class
+  debug     => 0,
   version   => $VERSION,
   base      => 'XAS::Lib::App::Service',
   mixin     => 'XAS::Lib::Mixins::Configs',

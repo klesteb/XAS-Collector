@@ -7,8 +7,9 @@ use Try::Tiny;
 use XAS::Lib::POE::PubSub;
 
 use XAS::Class
+  debug     => 0,
   version   => $VERSION,
-  base      => 'XAS::Lib::Net::POE::Client',
+  base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
   accessors => 'event',
 ;
