@@ -12,6 +12,7 @@ use XAS::Class
   version   => $VERSION,
   base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
+  constant  => 'HASH',
   utils     => 'dotid',
   codec     => 'JSON',
   mutators  => 'connected',
@@ -246,9 +247,20 @@ sub resume_processing {
 # ----------------------------------------------------------------------
 
 sub _start_queue {
-    my ($self, $queue) = @_[OBJECT,ARG0];
+    my ($self, $arg0) = @_[OBJECT,ARG0];
 
+    my $queue;
     my $alias = $self->alias;
+
+    if (ref($arg0) eq HASH) {
+
+        $queue = $arg0->{'queue'};
+
+    } else {
+
+        $queue = $arg0;
+
+    }
 
     my $frame = $self->stomp->subscribe(
         -destination => $queue,
@@ -262,9 +274,20 @@ sub _start_queue {
 }
 
 sub _stop_queue {
-    my ($self, $queue) = @_[OBJECT,ARG0];
+    my ($self, $arg0) = @_[OBJECT,ARG0];
 
+    my $queue;
     my $alias = $self->alias;
+
+    if (ref($arg0) eq HASH) {
+
+        $queue = $arg0->{'queue'};
+
+    } else {
+
+        $queue = $arg0;
+
+    }
 
     my $frame = $self->stomp->unsubscribe(
         -destination => $queue,
