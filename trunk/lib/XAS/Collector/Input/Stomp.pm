@@ -86,7 +86,7 @@ sub handle_connected {
 
     if ($self->tcp_keepalive) {
 
-        $self->log->debug("$alias: tcp_keepalive enabled");
+        $self->log->info_msg('tcp_keepalive_enabled', $alias);
 
         $self->init_keepalive();
         $self->enable_keepalive($self->socket);
@@ -114,7 +114,7 @@ sub handle_message {
 
         $message    = decode($frame->body);
         $message_id = $frame->headers->{'message-id'};
-        $nframe     = $self->stomp->ack({'message-id' => $message_id});
+        $nframe     = $self->stomp->ack(-message_id => $message_id);
 
         if ($type = $message->{'type'}) {
 

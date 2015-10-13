@@ -31,19 +31,19 @@ sub store_data {
 
     $self->log->debug("$alias: entering store_data()");
 
-    $buffer = sprintf("%s: hostname = %s; timestamp = %s; priority = %s; facility = %s; message = %s",
-        $alias, $data->{hostname}, $data->{datetime}, $data->{priority}, 
-        $data->{facility}, $data->{message}
+    $buffer = sprintf('%s: hostname = %s; timestamp = %s; priority = %s; facility = %s; message = %s',
+        $alias, $data->{'hostname'}, $data->{'datetime'}, $data->{'priority'}, 
+        $data->{'facility'}, $data->{'message'}
     );
 
     $self->log->debug($buffer);
 
     try {
 
-        $data->{revisison} = 1;
+        $data->{'revisison'} = 1;
         Log->create($schema, $data);
 
-        $self->log->info_msg('collector_processed', $alias, 1, $data->{hostname}, $data->{datetime});
+        $self->log->info_msg('collector_processed', $alias, 1, $data->{'hostname'}, $data->{'datetime'});
 
     } catch {
 

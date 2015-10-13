@@ -45,7 +45,7 @@ sub session_initialize {
 
     $self->SUPER::session_initialize();
 
-    $self->log->debug("$alias: leasing session_initialize()");
+    $self->log->debug("$alias: leaving session_initialize()");
 
 }
 
@@ -81,8 +81,8 @@ sub init {
 
     my $self = $class->SUPER::init(@_);
 
-    $self->{event}  = XAS::Lib::POE::PubSub->new();
-    $self->{schema} = XAS::Model::Schema->opendb($self->database);
+    $self->{'event'}  = XAS::Lib::POE::PubSub->new();
+    $self->{'schema'} = XAS::Model::Schema->opendb($self->database);
 
     return $self;
 
@@ -94,33 +94,38 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Alerts::Database - Perl extension for the XAS Environment
+XAS::Collector::Output::Database::Base - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use XAS::Collector::Connector;
-  use XAS::Collector::Alerts::Database;
+  use POE;
+  use XAS::Collector::Input::Stomp;
+  use XAS::Collector::Formatter::Logs;
+  use XAS::Collector::Output::Database::Logs;
 
   main: {
 
-      my $types = [
-          {'xas-alert', 'alert'}
-      ];
+      my $types => {
+         'xas-logs' => {
+             queue  => '/queue/logs',
+             format => 'format-logs',
+             output => 'database-logs',
+         },
+      };
 
-      my $connector = XAS::Collector::Connector->new(
-          -alias         => 'connector',
-          -host          => $host,
-          -port          => $port,
-          -tcp_keepalive => 1,
-          -login         => 'guest',
-          -passcode      => 'guest',
-          -types         => $types
+      my $processor = XAS::Collector::Input::Stomp->new(
+         -alias => 'input-stomp',
+         -types => $types
       );
 
-      my $notify = XAS::Collector::Alerts::Database->new(
-          -alias     => 'alert',
-          -connector => 'connector',
-          -queue     => '/queue/alerts',
+      my $formatter = XAS::Collector::Formatter::Logs->new(
+          -alias => 'format-logs',
+      );
+
+      my $notify = XAS::Collector::Output::Database::Logs->new(
+          -alias    => 'database-logs',
+          -database => 'messaging',
+          -queue    => '/queue/logs',
       );
 
       $poe_kernel->run();
@@ -131,7 +136,7 @@ XAS::Collector::Alerts::Database - Perl extension for the XAS Environment
 
 =head1 DESCRIPTION
 
-This module handles the xas-alert packet type.
+This module is the base class for database storage.
 
 =head1 METHODS
 
@@ -153,28 +158,6 @@ The name of the queue to process messages from.
 =item B<-database>
 
 An optional configuration name for the database to use, defaults to 'messaging'.
-
-=back
-
-=head1 PUBLIC EVENTS
-
-=head2 store_data(OBJECT, ARG0, ARG1)
-
-This event will trigger the storage of xas-alert packets into the database. 
-
-=over 4
-
-=item B<OBJECT>
-
-A handle to the current object.
-
-=item B<ARG0>
-
-The data to be stored within the database.
-
-=item B<ARG1>
-
-The acknowledgement to send back to the message queue server.
 
 =back
 
