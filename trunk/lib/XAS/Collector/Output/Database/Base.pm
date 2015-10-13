@@ -16,6 +16,7 @@ use XAS::Class
   accessors => 'schema event',
   vars => {
     PARAMS => {
+      -queue    => 1,
       -database => { optional => 1, default => 'messaging' },
     }
   }

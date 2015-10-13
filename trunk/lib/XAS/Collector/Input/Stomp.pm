@@ -116,20 +116,20 @@ sub handle_message {
         $message_id = $frame->headers->{'message-id'};
         $nframe     = $self->stomp->ack({'message-id' => $message_id});
 
-        if ($type = $message->{type}) {
+        if ($type = $message->{'type'}) {
 
             $self->log->info_msg('collector_received',
                 $alias,
                 $message_id,
-                $message->{type},
-                $message->{hostname}
+                $message->{'type'},
+                $message->{'hostname'}
             );
 
-            if (defined($self->{types}->{$type})) {
+            if (defined($self->{'types'}->{$type})) {
 
-                $data   = $message->{data};
-                $format = $self->{types}->{$type}->{format};
-                $output = $self->{types}->{$type}->{output};
+                $data   = $message->{'data'};
+                $format = $self->{'types'}->{$type}->{'format'};
+                $output = $self->{'types'}->{$type}->{'output'};
 
                 $poe_kernel->post($format, 'format_data', $data, $nframe, $alias, $output);
 
@@ -199,9 +199,9 @@ sub pause_processing {
 
     if ($self->connected) {
 
-        foreach my $type (keys %{$self->{types}}) {
+        foreach my $type (keys %{$self->{'types'}}) {
 
-            my $queue = $self->{types}->{$type}->{queue};
+            my $queue = $self->{'types'}->{$type}->{'queue'};
 
             $poe_kernel->post($alias, 'stop_queue', $queue);
 
@@ -222,9 +222,9 @@ sub resume_processing {
 
     if ($self->connected) {
 
-        foreach my $type (keys %{$self->{types}}) {
+        foreach my $type (keys %{$self->{'types'}}) {
 
-            my $queue = $self->{types}->{$type}->{queue};
+            my $queue = $self->{'types'}->{$type}->{'queue'};
 
             $poe_kernel->post($alias, 'start_queue', $queue);
 
@@ -250,11 +250,11 @@ sub _start_queue {
 
     my $alias = $self->alias;
 
-    my $frame = $self->stomp->subscribe({
-        destination      => $queue,
-        ack              => 'client',
-        'prefetch-count' => $self->prefetch,
-    });
+    my $frame = $self->stomp->subscribe(
+        -destination => $queue,
+        -ack         => 'client',
+        -prefetch    => $self->prefetch,
+    );
 
     $self->log->info_msg('collector_subscribed', $alias, $queue);
     $poe_kernel->post($alias, 'write_data', $frame);
@@ -266,9 +266,9 @@ sub _stop_queue {
 
     my $alias = $self->alias;
 
-    my $frame = $self->stomp->unsubscribe({
-        destination => $queue,
-    });
+    my $frame = $self->stomp->unsubscribe(
+        -destination => $queue,
+    );
 
     $self->log->info_msg('collector_unsubscribed', $alias, $queue);
     $poe_kernel->post($alias, 'write_data', $frame);
@@ -284,8 +284,8 @@ sub init {
 
     my $self = $class->SUPER::init(@_);
 
-    $self->{pubsub} = XAS::Lib::POE::PubSub->new();
-    $self->{connected} = 0;
+    $self->{'pubsub'} = XAS::Lib::POE::PubSub->new();
+    $self->{'connected'} = 0;
 
     return $self;
 
