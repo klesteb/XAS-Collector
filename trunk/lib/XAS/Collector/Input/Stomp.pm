@@ -12,6 +12,7 @@ use XAS::Class
   version   => $VERSION,
   base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
+  constant  => 'HASH',
   utils     => 'dotid',
   codec     => 'JSON',
   mutators  => 'connected',
@@ -233,10 +234,12 @@ sub resume_processing {
 # ----------------------------------------------------------------------
 
 sub _start_queue {
-    my ($self, $queue) = @_[OBJECT,ARG0];
+    my ($self, $arg0) = @_[OBJECT,ARG0];
 
+    my $queue;
     my $alias = $self->alias;
 
+<<<<<<< HEAD
     if ($self->connected) {
 
         my $frame = $self->stomp->subscribe(
@@ -252,16 +255,35 @@ sub _start_queue {
 
         $poe_kernel->delay('start_queue', 5, $queue);
         $self->log->warn_msg('collector_waiting', $alias);
+=======
+    if (ref($arg0) eq HASH) {
+
+        $queue = $arg0->{'queue'};
+
+    } else {
+
+        $queue = $arg0;
+
+    }
+
+    my $frame = $self->stomp->subscribe(
+        -destination => $queue,
+        -ack         => 'client',
+        -prefetch    => $self->prefetch,
+    );
+>>>>>>> 229d7d39ad7ddb659d8b19ccab81d86f55926353
 
     }
 
 }
 
 sub _stop_queue {
-    my ($self, $queue) = @_[OBJECT,ARG0];
+    my ($self, $arg0) = @_[OBJECT,ARG0];
 
+    my $queue;
     my $alias = $self->alias;
 
+<<<<<<< HEAD
     if ($self->connected) {
 
         my $frame = $self->stomp->unsubscribe(
@@ -270,6 +292,21 @@ sub _stop_queue {
 
         $self->log->info_msg('collector_unsubscribed', $alias, $queue);
         $poe_kernel->post($alias, 'write_data', $frame);
+=======
+    if (ref($arg0) eq HASH) {
+
+        $queue = $arg0->{'queue'};
+
+    } else {
+
+        $queue = $arg0;
+
+    }
+
+    my $frame = $self->stomp->unsubscribe(
+        -destination => $queue,
+    );
+>>>>>>> 229d7d39ad7ddb659d8b19ccab81d86f55926353
 
     }
 
