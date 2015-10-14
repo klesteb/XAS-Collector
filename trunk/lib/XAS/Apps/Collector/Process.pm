@@ -43,7 +43,7 @@ sub setup {
         my $queue  = $self->cfg->val($section, 'queue');
         my $output = $self->cfg->val($section, 'output');
 
-        $self->{types}->{trim($type)} = {
+        $self->{'types'}->{trim($type)} = {
             queue  => $queue,
             format => $alias,
             output => $output
@@ -54,7 +54,7 @@ sub setup {
 
     }
 
-    # inputers
+    # outputers
 
     foreach my $section (@sections) {
 
@@ -66,7 +66,7 @@ sub setup {
         my $module = $self->cfg->val($section, 'module');
         my $alias  = $self->cfg->val($section, 'alias');
 
-        push(@args, '-types', $self->{types});
+        push(@args, '-types', $self->{'types'});
 
         my @parameters = $self->cfg->Parameters($section);
 
@@ -85,7 +85,7 @@ sub setup {
 
     }
 
-    # outputers
+    # inputers
 
     foreach my $section (@sections) {
 

@@ -57,8 +57,7 @@ XAS::Collector::Formatter::Base - A class for the XAS environment
 
 =head1 DESCRIPTION
 
-This module will take a 'wise-notify' packet and convert it into a
-logstash "json_event".
+This module is the base class for formatting data.
 
 =head1 METHODS
 
@@ -80,7 +79,7 @@ Kevin L. Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2014 Kevin L. Esteb
+Copyright (c) 2015 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text

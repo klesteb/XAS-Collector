@@ -117,8 +117,6 @@ sub handle_message {
         $message_id = $frame->header->message_id;
         $nframe     = $self->stomp->ack(-message_id => $message_id);
 
-warn Dumper($message);
-        
         if ($type = $message->{'type'}) {
 
             $self->log->info_msg('collector_received',
@@ -254,7 +252,7 @@ sub _start_queue {
     } else {
 
         $poe_kernel->delay('start_queue', 5, $queue);
-        $self->log->warn_msg('collector_waiting', $alias);
+        $self->log->warn_msg('collector_waiting', $alias, $queue);
 
     }
 
@@ -271,7 +269,7 @@ sub _stop_queue {
             -destination => $queue,
         );
 
-        $self->log->info_msg('collector_unsubscribed', $alias, $queue);
+        $self->log->warn_msg('collector_unsubscribed', $alias, $queue);
         $poe_kernel->post($alias, 'write_data', $frame);
 
     }

@@ -32,7 +32,6 @@ sub store_data {
 
     $self->log->debug("$alias: entering store_data()");
 
-warn Dumper($data);
     $buffer = sprintf('%s: hostname = %s; timestamp = %s; level = %s; facility = %s; message = %s',
         $alias, $data->{'hostname'}, 
         $data->{'datetime'}, $data->{'level'}, 

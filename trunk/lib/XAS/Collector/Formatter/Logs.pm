@@ -55,40 +55,10 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Logs::Database - Perl extension for the XAS Environment
+XAS::Collector::Formatter::Logs - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use XAS::Collector::Connector;
-  use XAS::Collector::Logs::Database;
-
-  main: {
-
-      my $types = [
-          {'xas-logs', 'logs'}
-      ];
-
-      my $connector = XAS::Collector::Connector->new(
-          -host          => $host,
-          -port          => $port,
-          -tcp_keepalive => 1,
-          -alias         => 'connector',
-          -login         => 'xas',
-          -passcode      => 'xas',
-          -types         => $types
-      );
-
-      my $notify = XAS::Collector::Logs->Database->new(
-          -alias     => 'logs',
-          -connector => 'connector'
-          -queue     => '/queue/logs',
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
 
 =head1 DESCRIPTION
 
