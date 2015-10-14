@@ -117,6 +117,8 @@ sub handle_message {
         $message_id = $frame->header->message_id;
         $nframe     = $self->stomp->ack(-message_id => $message_id);
 
+warn Dumper($message);
+        
         if ($type = $message->{'type'}) {
 
             $self->log->info_msg('collector_received',
@@ -139,7 +141,7 @@ sub handle_message {
                 $self->throw_msg(
                     dotid($self->class) . '.input.stomp.unknowntype',
                     'collector_unknowntype',
-                    $message->{type},
+                    $message->{'type'},
                 );
 
             }

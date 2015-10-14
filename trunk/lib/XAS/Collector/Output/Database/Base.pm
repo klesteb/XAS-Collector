@@ -60,7 +60,6 @@ sub session_startup {
     $self->event->publish(
         -event => 'start_queue',
         -args  => $queue 
-        }
     );
 
     # walk the chain

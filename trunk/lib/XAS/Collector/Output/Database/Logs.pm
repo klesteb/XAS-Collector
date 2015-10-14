@@ -16,7 +16,7 @@ use XAS::Class
   base    => 'XAS::Collector::Output::Database::Base',
 ;
 
-#use Data::Dumper;
+use Data::Dumper;
 
 # --------------------------------------------------------------------
 # Public Events
@@ -26,13 +26,16 @@ sub store_data {
     my ($self, $data, $ack, $input) = @_[OBJECT,ARG0,ARG1,ARG2];
 
     my $buffer;
-    my $alias = $self->alias;
+    my $alias  = $self->alias;
     my $schema = $self->schema;
+    my $queue  = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
 
-    $buffer = sprintf('%s: hostname = %s; timestamp = %s; priority = %s; facility = %s; message = %s',
-        $alias, $data->{'hostname'}, $data->{'datetime'}, $data->{'priority'}, 
+warn Dumper($data);
+    $buffer = sprintf('%s: hostname = %s; timestamp = %s; level = %s; facility = %s; message = %s',
+        $alias, $data->{'hostname'}, 
+        $data->{'datetime'}, $data->{'level'}, 
         $data->{'facility'}, $data->{'message'}
     );
 
@@ -40,20 +43,23 @@ sub store_data {
 
     try {
 
-        $data->{'revisison'} = 1;
+        $data->{'revision'} = 1;
         Log->create($schema, $data);
 
         $self->log->info_msg('collector_processed', $alias, 1, $data->{'hostname'}, $data->{'datetime'});
+        $poe_kernel->post($input, 'send_data', $ack);
 
     } catch {
 
         my $ex = $_;
 
         $self->exception_handler($ex);
+        $self->event->publish(
+            -event => 'stop_queue',
+            -args  => $queue
+        );
 
     };
-
-    $poe_kernel->post($input, 'send_data', $ack);
 
     $self->log->debug("$alias: leaving store_data()");
 

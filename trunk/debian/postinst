@@ -35,7 +35,7 @@ case "$1" in
         then
             echo " " >> /etc/xas/database.ini
             echo "[messaging]" >> /etc/xas/database.ini
-            echo "dbname = /usr/lib/xas/messaging.db" >> /etc/xas/database.ini
+            echo "dbname = /var/lib/xas/messaging.db" >> /etc/xas/database.ini
             echo "dsn = SQLite" >> /etc/xas/database.ini            
         fi
 #        if [ ! -f /var/lib/xas/messaging.db ]

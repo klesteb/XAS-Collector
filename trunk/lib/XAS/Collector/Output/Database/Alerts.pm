@@ -26,8 +26,9 @@ sub store_data {
     my ($self, $data, $ack, $input) = @_[OBJECT,ARG0,ARG1,ARG2];
 
     my $buffer;
-    my $alias = $self->alias;
+    my $alias  = $self->alias;
     my $schema = $self->schema;
+    my $queue  = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
 
@@ -50,6 +51,10 @@ sub store_data {
         my $ex = $_;
 
         $self->exception_handler($ex);
+        $self->event->publish(
+            -event => 'stop_queue',
+            -args  => $queue
+        );
 
     };
 

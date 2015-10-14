@@ -9,7 +9,6 @@ use XAS::Class
   debug   => 0,
   version => $VERSION,
   base    => 'XAS::Collector::Formatter::Base',
-  utils   => 'db2dt',
 ;
 
 #use Data::Dumper;
@@ -25,18 +24,17 @@ sub format_data {
 
     $self->log->debug("$alias: formatter");
 
-    my $dt = db2dt($data->{datetime});
     my $rec = {
-        datetime   => $dt->strftime('%Y-%m-%dT%H:%M:%S.%3N%z'),
-        hostname   => $data->{hostname},
-        type       => $data->{type},
-        level      => $data->{priority},
-        facility   => $data->{facility},
-        process    => $data->{process},
-        message    => $data->{message},
-        pid        => $data->{pid},
-        tid        => $data->{tid},
-        msgnum     => $data->{msgnum},
+        datetime   => $data->{'@timestamp'},
+        hostname   => $data->{'hostname'},
+        type       => $data->{'type'},
+        level      => $data->{'priority'},
+        facility   => $data->{'facility'},
+        process    => $data->{'process'},
+        message    => $data->{'message'},
+        pid        => $data->{'pid'},
+        tid        => $data->{'tid'} || '0',
+        msgnum     => $data->{'msgnum'} || '0',
     };
 
     $poe_kernel->call($output, 'store_data', $rec, $ack, $input);

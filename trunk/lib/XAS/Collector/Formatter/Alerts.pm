@@ -25,22 +25,22 @@ sub format_data {
 
     $self->log->debug("$alias: formatter");
 
-    my $dt = db2dt($data->{datetime});
+    my $dt = db2dt($data->{'datetime'});
     my $message = sprintf('[%s] %s - %s - %s - %s',
-        $data->{datetime}, $data->{hostname}, $data->{facility},
-        $data->{priority}, $data->{message}
+        $data->{'datetime'}, $data->{'hostname'}, $data->{'facility'},
+        $data->{'priority'}, $data->{'message'}
     );
 
     my $rec = {
         datetime   => $dt->strftime('%Y-%m-%dT%H:%M:%S.%3N%z'),
-        hostname   => $data->{hostname},
-        level      => $data->{priority},
-        facility   => $data->{facility},
-        process    => $data->{process},
-        message    => $data->{message},
-        pid        => $data->{pid},
-        tid        => $data->{tid},
-        msgnum     => $data->{msgnum},
+        hostname   => $data->{'hostname'},
+        level      => $data->{'priority'},
+        facility   => $data->{'facility'},
+        process    => $data->{'process'},
+        message    => $data->{'message'},
+        pid        => $data->{'pid'},
+        tid        => $data->{'tid'},
+        msgnum     => $data->{'msgnum'},
     };
 
     $poe_kernel->call($output, 'store_data', $rec, $ack, $input);
