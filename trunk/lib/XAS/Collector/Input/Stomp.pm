@@ -113,7 +113,7 @@ sub handle_message {
     try {
 
         $message    = decode($frame->body);
-        $message_id = $frame->headers->{'message-id'};
+        $message_id = $frame->header->message_id;
         $nframe     = $self->stomp->ack(-message_id => $message_id);
 
         if ($type = $message->{'type'}) {
@@ -197,15 +197,11 @@ sub pause_processing {
 
     $self->log->debug("$alias: entering pause_processing()");
 
-    if ($self->connected) {
+    foreach my $type (keys %{$self->{'types'}}) {
 
-        foreach my $type (keys %{$self->{'types'}}) {
+        my $queue = $self->{'types'}->{$type}->{'queue'};
 
-            my $queue = $self->{'types'}->{$type}->{'queue'};
-
-            $poe_kernel->post($alias, 'stop_queue', $queue);
-
-        }
+        $poe_kernel->post($alias, 'stop_queue', $queue);
 
     }
 
@@ -220,20 +216,11 @@ sub resume_processing {
 
     $self->log->debug("$alias: entering resume_processing()");
 
-    if ($self->connected) {
+    foreach my $type (keys %{$self->{'types'}}) {
 
-        foreach my $type (keys %{$self->{'types'}}) {
+        my $queue = $self->{'types'}->{$type}->{'queue'};
 
-            my $queue = $self->{'types'}->{$type}->{'queue'};
-
-            $poe_kernel->post($alias, 'start_queue', $queue);
-
-        }
-
-    } else {
-
-        $poe_kernel->delay('resume_processing', 5);
-        $self->log->warn_msg('collector_waiting', $alias);
+        $poe_kernel->post($alias, 'start_queue', $queue);
 
     }
 
@@ -250,14 +237,23 @@ sub _start_queue {
 
     my $alias = $self->alias;
 
-    my $frame = $self->stomp->subscribe(
-        -destination => $queue,
-        -ack         => 'client',
-        -prefetch    => $self->prefetch,
-    );
+    if ($self->connected) {
 
-    $self->log->info_msg('collector_subscribed', $alias, $queue);
-    $poe_kernel->post($alias, 'write_data', $frame);
+        my $frame = $self->stomp->subscribe(
+            -destination => $queue,
+            -ack         => 'client',
+            -prefetch    => $self->prefetch,
+        );
+
+        $self->log->info_msg('collector_subscribed', $alias, $queue);
+        $poe_kernel->post($alias, 'write_data', $frame);
+
+    } else {
+
+        $poe_kernel->delay('start_queue', 5, $queue);
+        $self->log->warn_msg('collector_waiting', $alias);
+
+    }
 
 }
 
@@ -266,12 +262,16 @@ sub _stop_queue {
 
     my $alias = $self->alias;
 
-    my $frame = $self->stomp->unsubscribe(
-        -destination => $queue,
-    );
+    if ($self->connected) {
 
-    $self->log->info_msg('collector_unsubscribed', $alias, $queue);
-    $poe_kernel->post($alias, 'write_data', $frame);
+        my $frame = $self->stomp->unsubscribe(
+            -destination => $queue,
+        );
+
+        $self->log->info_msg('collector_unsubscribed', $alias, $queue);
+        $poe_kernel->post($alias, 'write_data', $frame);
+
+    }
 
 }
 

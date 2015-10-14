@@ -12,6 +12,11 @@ use XAS::Class
   base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
   accessors => 'event',
+  vars => {
+    PARAMS => {
+      -queue => 1,
+    }
+  }
 ;
 
 use Data::Dumper;
@@ -29,7 +34,7 @@ sub handle_connection {
 
     if ($self->tcp_keepalive) {
 
-        $self->log->debug("$alias: tcp_keepalive enabled");
+        $self->log->info_msg('tcp_keepalive_enabled', $alias);
 
         $self->init_keepalive(
             -tcp_keepidle => 100,
@@ -40,8 +45,6 @@ sub handle_connection {
     }
 
     $self->log->info_msg('collector_connected', $alias, $self->host, $self->port);
-
-    $self->event->publish(-event => 'resume_processing');
 
 }
 
@@ -58,10 +61,14 @@ sub connection_down {
     my ($self) = $_[OBJECT];
 
     my $alias = $self->alias;
+    my $queue = $self->queue;
 
     $self->log->warn_msg('collector_down', $alias);
 
-    $self->event->publish(-event => 'pause_processing');
+    $self->event->publish(
+        -event => 'stop_queue',
+        -args  => $queue
+    );
 
 }
 
@@ -69,10 +76,14 @@ sub connection_up {
     my ($self) = $_[OBJECT];
 
     my $alias = $self->alias;
+    my $queue = $self->queue;
 
     $self->log->warn_msg('collector_up', $alias);
 
-    $self->event->publish(-event => 'resume_processing');
+    $self->event->publish(
+        -event => 'start_queue',
+        -args  => $queue
+    );
 
 }
 
@@ -123,7 +134,7 @@ sub init {
 
     my $self = $class->SUPER::init(@_);
 
-    $self->{event} = XAS::Lib::POE::PubSub->new();
+    $self->{'event'} = XAS::Lib::POE::PubSub->new();
 
     return $self;
 

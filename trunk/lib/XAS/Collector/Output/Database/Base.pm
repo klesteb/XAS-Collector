@@ -59,8 +59,7 @@ sub session_startup {
 
     $self->event->publish(
         -event => 'start_queue',
-        -args  => { 
-            '-queue' => $queue 
+        -args  => $queue 
         }
     );
 
