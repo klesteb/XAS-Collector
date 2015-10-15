@@ -3,7 +3,6 @@ package XAS::Collector::Formatter::Logs;
 our $VERSION = '0.01';
 
 use POE;
-use Try::Tiny;
 
 use XAS::Class
   debug   => 0,
@@ -20,21 +19,21 @@ use XAS::Class
 sub format_data {
     my ($self, $data, $ack, $input, $output) = @_[OBJECT,ARG0...ARG3];
 
-    my $alias  = $self->alias;
+    my $alias = $self->alias;
 
     $self->log->debug("$alias: formatter");
 
     my $rec = {
-        datetime   => $data->{'@timestamp'},
-        hostname   => $data->{'hostname'},
-        type       => $data->{'type'},
-        level      => $data->{'priority'},
-        facility   => $data->{'facility'},
-        process    => $data->{'process'},
-        message    => $data->{'message'},
-        pid        => $data->{'pid'},
-        tid        => $data->{'tid'} || '0',
-        msgnum     => $data->{'msgnum'} || '0',
+        datetime => $data->{'@timestamp'},
+        hostname => $data->{'hostname'},
+        type     => $data->{'type'},
+        level    => $data->{'priority'},
+        facility => $data->{'facility'},
+        process  => $data->{'process'},
+        message  => $data->{'message'},
+        pid      => $data->{'pid'},
+        tid      => $data->{'tid'} || '0',
+        msgnum   => $data->{'msgnum'} || '0',
     };
 
     $poe_kernel->call($output, 'store_data', $rec, $ack, $input);

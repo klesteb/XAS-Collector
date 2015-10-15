@@ -16,7 +16,7 @@ use XAS::Class
   }
 ;
 
-#use Data::Dumper;
+use Data::Dumper;
 
 # ----------------------------------------------------------------------
 # Public Methods
@@ -51,10 +51,11 @@ sub setup {
 
         load_module($module);
         $module->new(-alias => $alias);
+warn "formatter module->new\n";
 
     }
 
-    # outputers
+    # inputters
 
     foreach my $section (@sections) {
 
@@ -78,6 +79,7 @@ sub setup {
 
         }
 
+warn Dumper(@args);
         load_module($module);
         $module->new(@args);
 
@@ -85,7 +87,7 @@ sub setup {
 
     }
 
-    # inputers
+    # outputters
 
     foreach my $section (@sections) {
 
