@@ -22,97 +22,100 @@ use Data::Dumper;
 # Public Methods
 # ----------------------------------------------------------------------
 
+sub build_args {
+    my $self = shift;
+    my $section = shift;
+    my $parameters = shift;
+
+    my @args;
+
+    foreach my $parameter (@$parameters) {
+
+        next if ($parameter eq 'module');
+        push(@args, "-$parameter", $self->cfg->val($section, $parameter));
+
+    }
+
+    return @args;
+
+}
+
 sub setup {
     my $self = shift;
 
-    my @args;
     my @sections = $self->cfg->Sections();
-
-    # formatters
 
     foreach my $section (@sections) {
 
         next if ($section =~ /^collector:\s+input/);
         next if ($section =~ /^collector:\s+output/);
-        next if ($section !~ /^collector:/);
+        next if ($section =~ /^collector:\s+format/);
 
         my ($type) = $section =~ /^collector:(.*)/;
 
-        my $module = $self->cfg->val($section, 'module');
-        my $alias  = $self->cfg->val($section, 'alias');
         my $queue  = $self->cfg->val($section, 'queue');
         my $output = $self->cfg->val($section, 'output');
+        my $format = $self->cfg->val($section, 'format');
 
         $self->{'types'}->{trim($type)} = {
             queue  => $queue,
-            format => $alias,
+            format => $format,
             output => $output
         };
 
-        load_module($module);
-        $module->new(-alias => $alias);
-warn "formatter module->new\n";
-
     }
-
-    # inputters
 
     foreach my $section (@sections) {
 
-        next if ($section !~ /^collector:\s+input/);
-        next if ($section !~ /^collector:/);
+        if ($section =~ /^collector:\s+input/) {
 
-        @args = ();
+            my $alias = $self->cfg->val($section, 'alias');
+            my $module = $self->cfg->val($section, 'module');
+            my @parameters = $self->cfg->Parameters($section);
+            my @args = $self->build_args($section, \@parameters);
 
-        my $module = $self->cfg->val($section, 'module');
-        my $alias  = $self->cfg->val($section, 'alias');
+            push(@args, '-types', $self->{'types'});
 
-        push(@args, '-types', $self->{'types'});
+            load_module($module);
+            $module->new(@args);
 
-        my @parameters = $self->cfg->Parameters($section);
+            $self->service->register($alias);
 
-        foreach my $parameter (@parameters) {
+        } elsif ($section =~ /^collector:\s+format/) {
 
-            next if ($parameter eq 'module');
+            my $alias = $self->cfg->val($section, 'alias');
+            my $module = $self->cfg->val($section, 'module');
+            my @parameters = $self->cfg->Parameters($section);
+            my @args = $self->build_args($section, \@parameters);
 
-            push(@args, "-$parameter", $self->cfg->val($section, $parameter));
+            load_module($module);
+            $module->new(@args);
+
+            $self->service->register($alias);
+
+        } elsif ($section =~ /^collector:\s+output/) {
+
+            my $alias = $self->cfg->val($section, 'alias');
+            my $module = $self->cfg->val($section, 'module');
+            my @parameters = $self->cfg->Parameters($section);
+            my @args = $self->build_args($section, \@parameters);
+
+            while (my ($key, $value) = each %{$self->{'types'}}) {
+
+                if ($value->{'output'} eq $alias) {
+
+                    push(@args, '-queue', $value->{'queue'});
+
+                }
+
+            }
+
+            load_module($module);
+            $module->new(@args);
+
+            $self->service->register($alias);
 
         }
-
-warn Dumper(@args);
-        load_module($module);
-        $module->new(@args);
-
-        $self->service->register($alias);
-
-    }
-
-    # outputters
-
-    foreach my $section (@sections) {
-
-        next if ($section !~ /^collector:\s+output/);
-        next if ($section !~ /^collector:/);
-
-        @args = ();
-
-        my $module = $self->cfg->val($section, 'module');
-        my $alias  = $self->cfg->val($section, 'alias');
-
-        my @parameters = $self->cfg->Parameters($section);
-
-        foreach my $parameter (@parameters) {
-
-            next if ($parameter eq 'module');
-
-            push(@args, "-$parameter", $self->cfg->val($section, $parameter));
-
-        }
-
-        load_module($module);
-        $module->new(@args);
-
-        $self->service->register($alias);
 
     }
 

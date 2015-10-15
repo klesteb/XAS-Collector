@@ -1,15 +1,13 @@
-package XAS::Collector::Formatter::Alerts;
+package XAS::Collector::Format::Logs;
 
 our $VERSION = '0.01';
 
 use POE;
-use Try::Tiny;
 
 use XAS::Class
   debug   => 0,
   version => $VERSION,
-  base    => 'XAS::Collector::Formatter::Base',
-  utils   => 'db2dt',
+  base    => 'XAS::Collector::Format::Base',
 ;
 
 #use Data::Dumper;
@@ -19,31 +17,26 @@ use XAS::Class
 # --------------------------------------------------------------------
 
 sub format_data {
-    my ($self, $data, $ack, $input, $output) = @_[OBJECT,ARG0...ARG3];
+    my ($self, $data, $ack, $input, $output, $queue) = @_[OBJECT,ARG0...ARG4];
 
-    my $alias  = $self->alias;
+    my $alias = $self->alias;
 
     $self->log->debug("$alias: formatter");
 
-    my $dt = db2dt($data->{'datetime'});
-    my $message = sprintf('[%s] %s - %s - %s - %s',
-        $data->{'datetime'}, $data->{'hostname'}, $data->{'facility'},
-        $data->{'priority'}, $data->{'message'}
-    );
-
     my $rec = {
-        datetime   => $dt->strftime('%Y-%m-%dT%H:%M:%S.%3N%z'),
-        hostname   => $data->{'hostname'},
-        level      => $data->{'priority'},
-        facility   => $data->{'facility'},
-        process    => $data->{'process'},
-        message    => $data->{'message'},
-        pid        => $data->{'pid'},
-        tid        => $data->{'tid'},
-        msgnum     => $data->{'msgnum'},
+        datetime => $data->{'@timestamp'},
+        hostname => $data->{'hostname'},
+        type     => $data->{'type'},
+        level    => $data->{'priority'},
+        facility => $data->{'facility'},
+        process  => $data->{'process'},
+        message  => $data->{'message'},
+        pid      => $data->{'pid'},
+        tid      => $data->{'tid'} || '0',
+        msgnum   => $data->{'msgnum'} || '0',
     };
 
-    $poe_kernel->call($output, 'store_data', $rec, $ack, $input);
+    $poe_kernel->call($output, 'store_data', $rec, $ack, $input, $queue);
 
 }
 
@@ -61,44 +54,14 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Alerts::Database - Perl extension for the XAS Environment
+XAS::Collector::Format::Logs - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use XAS::Collector::Connector;
-  use XAS::Collector::Alerts::Database;
-
-  main: {
-
-      my $types = [
-          {'xas-alert', 'alert'}
-      ];
-
-      my $connector = XAS::Collector::Connector->new(
-          -alias         => 'connector',
-          -host          => $host,
-          -port          => $port,
-          -tcp_keepalive => 1,
-          -login         => 'guest',
-          -passcode      => 'guest',
-          -types         => $types
-      );
-
-      my $notify = XAS::Collector::Alerts::Database->new(
-          -alias     => 'alert',
-          -connector => 'connector',
-          -queue     => '/queue/alerts',
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
 
 =head1 DESCRIPTION
 
-This module handles the xas-alert packet type.
+This module handles the xas-logs packet type.
 
 =head1 METHODS
 

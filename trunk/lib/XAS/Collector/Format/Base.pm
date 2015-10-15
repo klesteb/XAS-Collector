@@ -1,4 +1,4 @@
-package XAS::Collector::Formatter::Base;
+package XAS::Collector::Format::Base;
 
 our $VERSION = '0.01';
 
@@ -45,14 +45,14 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Formatter::Base - A class for the XAS environment
+XAS::Collector::Format::Base - A class for the XAS environment
 
 =head1 SYNOPSIS
 
  use XAS::Class
    debug   => 0,
    version => '0.01',
-   base    => 'XAS::Collector::Formatter::Base'
+   base    => 'XAS::Collector::Format::Base'
  ;
 
 =head1 DESCRIPTION

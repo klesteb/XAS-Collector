@@ -14,12 +14,12 @@ use XAS::Class
   accessors => 'event',
   vars => {
     PARAMS => {
-      -queue => 1,
+      -queue => 1
     }
   }
 ;
 
-use Data::Dumper;
+#use Data::Dumper;
 
 # ----------------------------------------------------------------------
 # Public Events

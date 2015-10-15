@@ -16,9 +16,9 @@ init.d/xas-collector.rhel
 lib/XAS/Collector.pm
 lib/XAS/Apps/Collector/Process.pm
 lib/XAS/Collector/Input/Stomp.pm
-lib/XAS/Collector/Formatter/Base.pm
-lib/XAS/Collector/Formatter/Alerts.pm
-lib/XAS/Collector/Formatter/Logs.pm
+lib/XAS/Collector/Format/Base.pm
+lib/XAS/Collector/Format/Alerts.pm
+lib/XAS/Collector/Format/Logs.pm
 lib/XAS/Collector/Output/Database/Base.pm
 lib/XAS/Collector/Output/Database/Alerts.pm
 lib/XAS/Collector/Output/Database/Logs.pm

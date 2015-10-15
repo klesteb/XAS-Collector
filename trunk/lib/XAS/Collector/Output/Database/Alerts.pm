@@ -23,7 +23,7 @@ use XAS::Class
 # --------------------------------------------------------------------
 
 sub store_data {
-    my ($self, $data, $ack, $input) = @_[OBJECT,ARG0,ARG1,ARG2];
+    my ($self, $data, $ack, $input) = @_[OBJECT,ARG0...ARG2];
 
     my $buffer;
     my $alias  = $self->alias;

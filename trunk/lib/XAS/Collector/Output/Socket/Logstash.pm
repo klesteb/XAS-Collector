@@ -17,16 +17,17 @@ use XAS::Class
   }
 ;
 
-use Data::Dumper;
+#use Data::Dumper;
 
 # ----------------------------------------------------------------------
 # Public Events
 # ----------------------------------------------------------------------
 
 sub store_data {
-    my ($self, $data, $ack, $input) = @_[OBJECT, ARG0, ARG1, ARG2];
+    my ($self, $data, $ack, $input) = @_[OBJECT, ARG0...ARG2];
 
     my $alias = $self->alias;
+    my $queue = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
     $self->log->debug("$alias: data type is " . ref($data));

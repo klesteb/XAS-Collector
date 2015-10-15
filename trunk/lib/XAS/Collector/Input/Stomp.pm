@@ -251,7 +251,7 @@ sub _start_queue {
 
     } else {
 
-        $poe_kernel->delay('start_queue', 5, $queue);
+        $poe_kernel->delay_add('start_queue', 5, $queue);
         $self->log->warn_msg('collector_waiting', $alias, $queue);
 
     }
