@@ -43,6 +43,7 @@ sub build_args {
 sub setup {
     my $self = shift;
 
+    my $types;
     my @sections = $self->cfg->Sections();
 
     foreach my $section (@sections) {
@@ -57,7 +58,8 @@ sub setup {
         my $output = $self->cfg->val($section, 'output');
         my $format = $self->cfg->val($section, 'format');
 
-        $self->{'types'}->{trim($type)} = {
+        $type = trim($type);
+        $types->{$type} = {
             queue  => $queue,
             format => $format,
             output => $output
@@ -74,7 +76,7 @@ sub setup {
             my @parameters = $self->cfg->Parameters($section);
             my @args = $self->build_args($section, \@parameters);
 
-            push(@args, '-types', $self->{'types'});
+            push(@args, '-types', $types);
 
             load_module($module);
             $module->new(@args);
@@ -100,7 +102,7 @@ sub setup {
             my @parameters = $self->cfg->Parameters($section);
             my @args = $self->build_args($section, \@parameters);
 
-            while (my ($key, $value) = each %{$self->{'types'}}) {
+            while (my ($key, $value) = each %$types) {
 
                 if ($value->{'output'} eq $alias) {
 

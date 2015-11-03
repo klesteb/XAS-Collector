@@ -19,7 +19,7 @@ use XAS::Class
 # --------------------------------------------------------------------
 
 sub format_data {
-    my ($self, $data, $ack, $input, $output, $queue) = @_[OBJECT,ARG0...ARG4];
+    my ($self, $data, $ack, $input, $output) = @_[OBJECT,ARG0...ARG3];
 
     my $alias  = $self->alias;
 
@@ -43,7 +43,7 @@ sub format_data {
         msgnum     => $data->{'msgnum'},
     };
 
-    $poe_kernel->call($output, 'store_data', $rec, $ack, $input, $queue);
+    $poe_kernel->post($output, 'store_data', $rec, $ack, $input);
 
 }
 
