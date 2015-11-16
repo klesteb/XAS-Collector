@@ -12,9 +12,9 @@ use XAS::Class
   version   => $VERSION,
   base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
-  constants => 'HASH',
   utils     => 'dotid',
   codec     => 'JSON',
+  constants => 'HASH',
   mutators  => 'connected',
   accessors => 'pubsub',
   vars => {
@@ -306,7 +306,7 @@ XAS::Collector::Input::Stomp - A class for the XAS environment
 
  my $types => {
      'wpm-notify' => {
-         queue  => '/wise/alerts',
+         queue  => '/queue/alerts',
          format => 'format-notify',
          output => 'output-logstash',
      },
@@ -335,7 +335,8 @@ The message types that this input module can handle.
 
 =item B<-prefetch>
 
-The number of messages to prefetch from the queue. Default is unlimitied.
+The number of messages to prefetch from the queue. Default is unlimitied. This
+may have meaning only on a L<RabbitMQ|http://www.rabbitmq.com/stomp.html> server.
 
 =back
 

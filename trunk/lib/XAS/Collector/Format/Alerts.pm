@@ -66,6 +66,7 @@ XAS::Collector::Format::Alerts - Perl extension for the XAS Environment
 =head1 SYNOPSIS
 
 
+
 =head1 DESCRIPTION
 
 This module handles the xas-alert packet type.

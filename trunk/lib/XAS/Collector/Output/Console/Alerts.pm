@@ -4,14 +4,13 @@ our $VERSION = '0.01';
 
 use POE;
 use Try::Tiny;
+use Data::Dumper;
 
 use XAS::Class
   debug   => 0,
   version => $VERSION,
   base    => 'XAS::Collector::Output::Console::Base',
 ;
-
-use Data::Dumper;
 
 # --------------------------------------------------------------------
 # Public Events
@@ -85,7 +84,7 @@ XAS::Collector::Output::Console::Alerts - Perl extension for the XAS Environment
       );
 
       my $notify = XAS::Collector::Output::Console::Alerts->new(
-          -alias    => 'database-alerts',
+          -alias => 'database-alerts',
       );
 
       $poe_kernel->run();
@@ -102,14 +101,14 @@ This module handles the xas-alert packet type.
 
 =head2 new
 
-This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service>.
+This module inherits from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service>.
 
 =head1 PUBLIC EVENTS
 
 =head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
 This event will dump the contain of xas-alert packets to the console using
-L<Data::Dumper|Data::Dumper>.
+L<Data::Dumper|https://metacpan.org/pod/Data::Dumper>.
 
 =over 4
 
@@ -147,7 +146,7 @@ Kevin Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2014 Kevin L. Esteb
+Copyright (c) 2015 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text

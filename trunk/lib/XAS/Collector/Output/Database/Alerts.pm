@@ -109,6 +109,7 @@ XAS::Collector::Output::Database::Alerts - Perl extension for the XAS Environmen
       my $notify = XAS::Collector::Output::Database::Alerts->new(
           -alias    => 'database-alerts',
           -database => 'messaging',
+          -queue    => '/queue/alerts',
       );
 
       $poe_kernel->run();
@@ -120,21 +121,6 @@ XAS::Collector::Output::Database::Alerts - Perl extension for the XAS Environmen
 =head1 DESCRIPTION
 
 This module handles the xas-alert packet type.
-
-=head1 METHODS
-
-=head2 new
-
-This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
-takes these additional parameters:
-
-=over 4
-
-=item B<-database>
-
-An optional configuration name for the database to use, defaults to 'messaging'.
-
-=back
 
 =head1 PUBLIC EVENTS
 

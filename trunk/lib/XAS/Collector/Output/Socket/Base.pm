@@ -15,6 +15,7 @@ use XAS::Class
   vars => {
     PARAMS => {
       -queue => 1
+      -eol => { optional => 1, default => "\n" }, # really? silly ruby programmers
     }
   }
 ;
@@ -146,50 +147,76 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Output:::Base - Send output to a logstash server
+XAS::Collector::Output::Socket::Base - Base method to interact with socket servers
 
 =head1 SYNOPSIS
 
- use XAS::Class
-   version => '0.01',
-   base    => 'XAS::Collector::Output::Base
- ;
+  use POE;
+  use XAS::Collector::Input::Stomp;
+  use XAS::Collector::Formatter::Logs;
+  use XAS::Collector::Output::Socket::Logstash;
+
+  main: {
+
+      my $queue = '/queue/logs';
+      my $types => {
+         'xas-logs' => {
+             queue  => $queue,
+             format => 'format-logs',
+             output => 'socket-logstash',
+         },
+      };
+
+      my $input = XAS::Collector::Input::Stomp->new(
+         -alias => 'input-stomp',
+         -types => $types
+      );
+
+      my $formatter = XAS::Collector::Formatter::Logs->new(
+          -alias => 'format-logs',
+      );
+
+      my $output = XAS::Collector::Output::Socket::Logstash->new(
+          -alias => 'socket-logstash',
+          -queue => $queue,
+      );
+
+      $poe_kernel->run();
+
+      exit 0;
+
+  }
 
 =head1 DESCRIPTION
 
-This module will open and maintain a connection to a logstash server.
+This module will open and maintain a connection to a socker server. 
 
 =head1 METHODS
 
-=head2 initilize
+=head2 new
 
-Create an event named 'store_data'.
+This module inheirts from L<XAS::Lib::Net::POE::Client|XAS::Lib::Net::POE::Client> and
+takes these additional parameters:
 
-=head2 connection_down
+=over 4
 
-An event to notify the input session that the logstash connection
-is currently down.
+=item B<-queue>
 
-=head2 store_data
+The name of the queue that messages were processed from.
 
-An event to recieve a data packet and an ack. The data packet is sent
-to the logstash server and the ack is sent to the input session.
+=item B<-eol>
 
-=head2 read_data
+The end-of-line terminator to use. Defaults to "\n". 
 
-Read any data from logstash. Log the input to the log file.
-
-=head2 handle_connection
-
-Notify the input session that the connection to logstash is up.
+=back
 
 =head1 SEE ALSO
 
 =over 4
 
-=item L<XAS|XAS>
-
 =item L<XAS::Collector>
+
+=item L<XAS|XAS>
 
 =back
 

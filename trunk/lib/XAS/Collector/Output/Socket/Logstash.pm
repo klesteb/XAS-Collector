@@ -10,11 +10,6 @@ use XAS::Class
   version => $VERSION,
   base    => 'XAS::Collector::Output::Socket::Base',
   codec   => 'JSON',
-  vars => {
-    PARAMS => {
-      -eol => { optional => 1, default => "\n" }, # really? silly ruby programmers
-    }
-  }
 ;
 
 #use Data::Dumper;
@@ -68,69 +63,99 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Output:::Logstash - Send output to a logstash server
+XAS::Collector::Output:::Socket::Logstash - Send output to a logstash server
 
 =head1 SYNOPSIS
 
- use XAS::Collector::Output::Logstash;
+  use POE;
+  use XAS::Collector::Input::Stomp;
+  use XAS::Collector::Formatter::Logs;
+  use XAS::Collector::Output::Socket::Logstash;
 
- my $output = XAS::Collector::Output::Logstash->new(
-    -alias           => 'output-logstash',
-    -port            => 9500,
-    -host            => 'localhost',
-    -input           => 'stomp',
-    -tcp_keepalive   => 1,
-    -retry_reconnect => 1.
- );
+  main: {
+
+      my $types => {
+         'xas-logs' => {
+             queue  => '/queue/logs',
+             format => 'format-logs',
+             output => 'output-logstash',
+         },
+      };
+
+      my $processor = XAS::Collector::Input::Stomp->new(
+         -alias => 'input-stomp',
+         -types => $types
+      );
+
+      my $formatter = XAS::Collector::Formatter::Logs->new(
+          -alias => 'format-logs',
+      );
+
+      my $output = XAS::Collector::Output::Socket::Logstash->new(
+          -alias           => 'output-logstash',
+          -port            => 9500,
+          -host            => 'localhost',
+          -input           => 'stomp',
+          -tcp_keepalive   => 1,
+          -retry_reconnect => 1.
+      );
+
+      $poe_kernel->run();
+
+      exit 0;
+
+  }
 
 =head1 DESCRIPTION
 
 This module will open and maintain a connection to a logstash server.
 
-=head1 METHODS
+=head1 PUBLIC EVENTS
 
-=head2 initilize
+=head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
-Create an event named 'store_data'.
+This event will trigger the sending of packets to a logstash instance. 
 
-=head2 connection_down
+=over 4
 
-An event to notify the input session that the logstash connection
-is currently down.
+=item B<OBJECT>
 
-=head2 store_data
+A handle to the current object.
 
-An event to recieve a data packet and an ack. The data packet is sent
-to the logstash server and the ack is sent to the input session.
+=item B<ARG0>
 
-=head2 read_data
+The data to be stored within the database.
 
-Read any data from logstash. Log the input to the log file.
+=item B<ARG1>
 
-=head2 handle_connection
+The acknowledgement to send back to the message queue server.
 
-Notify the input session that the connection to logstash is up.
+=item B<ARG2>
+
+The input to return the ack too.
+
+=back
 
 =head1 SEE ALSO
 
 =over 4
 
-=item L<XAS|XAS>
-
 =item L<XAS::Collector>
+
+=item L<XAS|XAS>
 
 =back
 
 =head1 AUTHOR
 
-Kevin L. Esteb, E<lt>kesteb@wsipc.orgE<gt>
+Kevin L. Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2014 by WSIPC
+Copyright (c) 2014 Kevin L. Esteb
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.8 or,
-at your option, any later version of Perl 5 you may have available.
+This is free software; you can redistribute it and/or modify it under
+the terms of the Artistic License 2.0. For details, see the full text
+of the license at http://www.perlfoundation.org/artistic_license_2_0.
 
 =cut

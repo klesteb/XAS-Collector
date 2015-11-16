@@ -109,6 +109,7 @@ XAS::Collector::Output::Database::Logs - Perl extension for the XAS Environment
       my $notify = XAS::Collector::Output::Database::Logs->new(
           -alias    => 'database-logs',
           -database => 'messaging',
+          -queue    => '/queue/logs',
       );
 
       $poe_kernel->run();
@@ -120,21 +121,6 @@ XAS::Collector::Output::Database::Logs - Perl extension for the XAS Environment
 =head1 DESCRIPTION
 
 This module handles the xas-logs packet type.
-
-=head1 METHODS
-
-=head2 new
-
-This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
-takes these additional parameters:
-
-=over 4
-
-=item B<-database>
-
-An optional configuration name for the database to use, defaults to 'messaging'.
-
-=back
 
 =head1 PUBLIC EVENTS
 

@@ -89,14 +89,14 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Output::Database::Base - Perl extension for the XAS Environment
+XAS::Collector::Output::Console::Base - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
   use POE;
   use XAS::Collector::Input::Stomp;
   use XAS::Collector::Formatter::Logs;
-  use XAS::Collector::Output::Database::Logs;
+  use XAS::Collector::Output::Console::Logs;
 
   main: {
 
@@ -117,10 +117,8 @@ XAS::Collector::Output::Database::Base - Perl extension for the XAS Environment
           -alias => 'format-logs',
       );
 
-      my $notify = XAS::Collector::Output::Database::Logs->new(
-          -alias    => 'database-logs',
-          -database => 'messaging',
-          -queue    => '/queue/logs',
+      my $notify = XAS::Collector::Output::Console::Logs->new(
+          -alias => 'database-logs',
       );
 
       $poe_kernel->run();
@@ -142,17 +140,9 @@ takes these additional parameters:
 
 =over 4
 
-=item B<-connector>
-
-The name of the connector session.
-
 =item B<-queue>
 
 The name of the queue to process messages from.
-
-=item B<-database>
-
-An optional configuration name for the database to use, defaults to 'messaging'.
 
 =back
 
@@ -172,7 +162,7 @@ Kevin Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2014 Kevin L. Esteb
+Copyright (c) 2015 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text

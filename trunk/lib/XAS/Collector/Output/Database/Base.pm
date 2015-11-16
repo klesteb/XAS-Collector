@@ -145,10 +145,6 @@ takes these additional parameters:
 
 =over 4
 
-=item B<-connector>
-
-The name of the connector session.
-
 =item B<-queue>
 
 The name of the queue to process messages from.

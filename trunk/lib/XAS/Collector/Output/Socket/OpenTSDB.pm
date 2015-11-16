@@ -6,15 +6,10 @@ use POE;
 use Try::Tiny;
 
 use XAS::Class
-  debug     => 0,
-  version   => $VERSION,
-  base      => 'XAS::Collector::Output::Socket::Base',
-  utils     => 'trim',
-  vars => {
-    PARAMS => {
-      -eol => { optional => 1, default => "\n" }, # really? silly java programmers
-    }
-  }
+  debug   => 0,
+  version => $VERSION,
+  base    => 'XAS::Collector::Output::Socket::Base',
+  utils   => 'trim',
 ;
 
 #use Data::Dumper;
@@ -66,49 +61,84 @@ __END__
 
 =head1 NAME
 
-XAS::Collector::Output::OpenTSDB - A class to interact with OpenTSDB
+XAS::Collector::Output::Socket::OpenTSDB - A class to interact with OpenTSDB
 
 =head1 SYNOPSIS
 
- my $output = XAS::Collector::Output::OpenTSDB->new(
-    -alias           => 'output-opentsdb',
-    -port            => 4242,
-    -host            => 'localhost',
-    -tcp_keepalive   => 1,
-    -retry_reconnect => 1.
- );
+  use POE;
+  use XAS::Collector::Input::Stomp;
+  use XAS::Collector::Formatter::Logs;
+  use XAS::Collector::Output::Socket::OpenTSDB;
+
+  main: {
+
+      my $types => {
+         'xas-logs' => {
+             queue  => '/queue/logs',
+             format => 'format-logs',
+             output => 'output-opentsdb',
+         },
+      };
+
+      my $processor = XAS::Collector::Input::Stomp->new(
+         -alias => 'input-stomp',
+         -types => $types
+      );
+
+      my $formatter = XAS::Collector::Formatter::Logs->new(
+          -alias => 'format-logs',
+      );
+
+      my $output = XAS::Collector::Output::Socket::OpenTSDB->new(
+          -alias           => 'output-opentsdb',
+          -port            => 4242,
+          -host            => 'localhost',
+          -tcp_keepalive   => 1,
+          -retry_reconnect => 1.
+      );
+
+      $poe_kernel->run();
+
+      exit 0;
+
+  }
+
 
 =head1 DESCRIPTION
 
 This module will open and maintain a connection to a OpenTSDB server.
 
-=head1 METHODS
+=head1 PUBLIC EVENTS
 
-=head2 initilize
+=head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
-Create an event named 'store_data'.
+This event will trigger the sending of packets to a opentsdb instance. 
 
-=head2 connection_down
+=over 4
 
-An event to notify the input session that the logstash connection
-is currently down.
+=item B<OBJECT>
 
-=head2 store_data
+A handle to the current object.
 
-An event to recieve a data packet and an ack. The data packet is sent
-to the OpenTSDB server and the ack is sent to the input session.
+=item B<ARG0>
 
-=head2 read_data
+The data to be stored within the database.
 
-Read any data from OpenTSDB. Log the input to the log file.
+=item B<ARG1>
 
-=head2 handle_connection
+The acknowledgement to send back to the message queue server.
 
-Notify the input session that the connection to OpenTSDB is up.
+=item B<ARG2>
+
+The input to return the ack too.
+
+=back
 
 =head1 SEE ALSO
 
 =over 4
+
+=item L<XAS::Collector|XAS::Collector>
 
 =item L<XAS|XAS>
 
