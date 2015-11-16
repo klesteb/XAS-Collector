@@ -12,7 +12,7 @@ use XAS::Class
   version   => $VERSION,
   base      => 'XAS::Lib::Stomp::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
-  constant  => 'HASH',
+  constants => 'HASH',
   utils     => 'dotid',
   codec     => 'JSON',
   mutators  => 'connected',
@@ -25,7 +25,7 @@ use XAS::Class
   }
 ;
 
-use Data::Dumper;
+#use Data::Dumper;
 # rabbitmq - optional "prefetch-count" with subscribe frame.
 
 # ----------------------------------------------------------------------
