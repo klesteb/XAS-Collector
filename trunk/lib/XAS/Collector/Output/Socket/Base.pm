@@ -14,7 +14,7 @@ use XAS::Class
   accessors => 'event',
   vars => {
     PARAMS => {
-      -queue => 1
+      -queue => 1,
       -eol   => { optional => 1, default => "\n" }, # really? silly ruby programmers
     }
   }
