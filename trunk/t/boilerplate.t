@@ -8,7 +8,7 @@ use Test::More;
 unless ( $ENV{RELEASE_TESTING} ) {
     plan( skip_all => "Author tests not required for installation" );
 } else {
-    plan tests => 15;
+    plan tests => 18;
 }
 
 sub not_in_file_ok {
@@ -62,6 +62,9 @@ TODO: {
   module_boilerplate_ok('lib/XAS/Collector/Formatter/Base.pm');
   module_boilerplate_ok('lib/XAS/Collector/Formatter/Alerts.pm');
   module_boilerplate_ok('lib/XAS/Collector/Formatter/Logs.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Console/Base.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Console/Alerts.pm');
+  module_boilerplate_ok('lib/XAS/Collector/Output/Console/Logs.pm');
   module_boilerplate_ok('lib/XAS/Collector/Output/Database/Base.pm');
   module_boilerplate_ok('lib/XAS/Collector/Output/Database/Alerts.pm');
   module_boilerplate_ok('lib/XAS/Collector/Output/Database/Logs.pm');

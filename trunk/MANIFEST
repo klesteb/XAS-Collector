@@ -11,6 +11,7 @@ debian/preinst
 debian/rules
 debian/watch
 etc/xas-collector.ini
+etc/xas-collector-dump.ini
 init.d/xas-collector.debian
 init.d/xas-collector.rhel
 lib/XAS/Collector.pm
@@ -19,6 +20,9 @@ lib/XAS/Collector/Input/Stomp.pm
 lib/XAS/Collector/Format/Base.pm
 lib/XAS/Collector/Format/Alerts.pm
 lib/XAS/Collector/Format/Logs.pm
+lib/XAS/Collector/Output/Console/Base.pm
+lib/XAS/Collector/Output/Console/Alerts.pm
+lib/XAS/Collector/Output/Console/Logs.pm
 lib/XAS/Collector/Output/Database/Base.pm
 lib/XAS/Collector/Output/Database/Alerts.pm
 lib/XAS/Collector/Output/Database/Logs.pm

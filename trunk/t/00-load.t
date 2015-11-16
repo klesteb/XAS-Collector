@@ -1,6 +1,6 @@
 #!perl
 
-use Test::More tests => 15;
+use Test::More tests => 18;
 
 BEGIN {
     use_ok( 'XAS::Apps::Collector::Process' )            || print "Bail out!\n";
@@ -8,6 +8,9 @@ BEGIN {
     use_ok( 'XAS::Collector::Format::Base' )             || print "Bail out!\n";
     use_ok( 'XAS::Collector::Format::Alerts' )           || print "Bail out!\n";
     use_ok( 'XAS::Collector::Format::Logs' )             || print "Bail out!\n";
+    use_ok( 'XAS::Collector::Output::Console::Base' )    || print "Bail out!\n";
+    use_ok( 'XAS::Collector::Output::Console::Alerts' )  || print "Bail out!\n";
+    use_ok( 'XAS::Collector::Output::Console::Logs' )    || print "Bail out!\n";
     use_ok( 'XAS::Collector::Output::Database::Base' )   || print "Bail out!\n";
     use_ok( 'XAS::Collector::Output::Database::Alerts' ) || print "Bail out!\n";
     use_ok( 'XAS::Collector::Output::Database::Logs' )   || print "Bail out!\n";

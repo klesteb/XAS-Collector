@@ -36,11 +36,11 @@ sub format_data {
         hostname   => $data->{'hostname'},
         level      => $data->{'priority'},
         facility   => $data->{'facility'},
-        process    => $data->{'process'},
+        process    => $data->{'process'} || 'unknown',
         message    => $data->{'message'},
         pid        => $data->{'pid'},
-        tid        => $data->{'tid'},
-        msgnum     => $data->{'msgnum'},
+        tid        => $data->{'tid'} || '0',
+        msgnum     => $data->{'msgnum'} || '0',
     };
 
     $poe_kernel->post($output, 'store_data', $rec, $ack, $input);
