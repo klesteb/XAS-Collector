@@ -16,7 +16,7 @@ use XAS::Class
   base    => 'XAS::Collector::Output::Database::Base',
 ;
 
-use Data::Dumper;
+#use Data::Dumper;
 
 # --------------------------------------------------------------------
 # Public Events

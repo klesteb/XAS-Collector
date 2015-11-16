@@ -41,7 +41,7 @@ sub store_data {
 
     try {
 
-        $data->{'revisison'}  = 1;
+        $data->{'revision'} = 1;
         Alert->create($schema, $data);
 
         $self->log->info_msg('collector_processed', $alias, 1, $data->{'hostname'}, $data->{'datetime'});
