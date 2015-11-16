@@ -92,7 +92,7 @@ XAS::Collector::Output::Database::Alerts - Perl extension for the XAS Environmen
 
 =head1 DESCRIPTION
 
-This module handles the xas-alert packet type.
+This module handles the xas-alerts packet type.
 
 =head1 METHODS
 
@@ -105,7 +105,7 @@ and takes the same parameters.
 
 =head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
-This event will trigger the storage of xas-alert packets into the database. 
+This event will trigger the storage of xas-alerts packets into the database. 
 
 =over 4
 

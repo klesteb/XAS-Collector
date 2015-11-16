@@ -73,7 +73,7 @@ XAS::Collector::Format::Alerts - Perl extension for the XAS Environment
 
 =head1 DESCRIPTION
 
-This module formats the xas-alert packet type for output.
+This module formats the xas-alerts packet type for output.
 
 =head1 METHODS
 
@@ -84,7 +84,7 @@ and takes the same parameters.
 
 =head2 format_data(OBJECT, ARG0...ARG3)
 
-This event will trigger the formatting of xas-alert packets. 
+This event will trigger the formatting of xas-alerts packets. 
 
 =over 4
 
