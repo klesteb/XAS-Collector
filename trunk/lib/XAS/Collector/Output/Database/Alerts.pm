@@ -82,45 +82,24 @@ XAS::Collector::Output::Database::Alerts - Perl extension for the XAS Environmen
 
 =head1 SYNOPSIS
 
-  use POE;
-  use XAS::Collector::Input::Stomp;
-  use XAS::Collector::Formatter::Alerts;
   use XAS::Collector::Output::Database::Alerts;
 
-  main: {
-
-      my $types => {
-         'xas-alert' => {
-             queue  => '/queue/alerts',
-             format => 'format-alerts',
-             output => 'database-alerts',
-         },
-      };
-
-      my $processor = XAS::Collector::Input::Stomp->new(
-         -alias => 'input-stomp',
-         -types => $types
-      );
-
-      my $formatter = XAS::Collector::Formatter::Alerts->new(
-          -alias => 'format-alerts',
-      );
-
-      my $notify = XAS::Collector::Output::Database::Alerts->new(
-          -alias    => 'database-alerts',
-          -database => 'messaging',
-          -queue    => '/queue/alerts',
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
+  my $notify = XAS::Collector::Output::Database::Alerts->new(
+      -alias    => 'database-alerts',
+      -database => 'messaging',
+      -queue    => '/queue/alerts',
+  );
 
 =head1 DESCRIPTION
 
 This module handles the xas-alert packet type.
+
+=head1 METHODS
+
+=head2 new
+
+This module inherits from L<XAS::Collector::Output::Database::Base|XAS::Collector::Output::Database::Base> 
+and takes the same parameters.
 
 =head1 PUBLIC EVENTS
 

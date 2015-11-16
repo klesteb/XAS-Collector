@@ -82,51 +82,31 @@ XAS::Collector::Output::Database::Logs - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use POE;
-  use XAS::Collector::Input::Stomp;
-  use XAS::Collector::Formatter::Logs;
   use XAS::Collector::Output::Database::Logs;
 
-  main: {
+  my $output = XAS::Collector::Output::Database::Logs->new(
+      -alias    => 'database-logs',
+      -database => 'messaging',
+      -queue    => '/queue/logs',
+  );
 
-      my $types => {
-         'xas-logs' => {
-             queue  => '/queue/logs',
-             format => 'format-logs',
-             output => 'database-logs',
-         },
-      };
-
-      my $processor = XAS::Collector::Input::Stomp->new(
-         -alias => 'input-stomp',
-         -types => $types
-      );
-
-      my $formatter = XAS::Collector::Formatter::Logs->new(
-          -alias => 'format-logss',
-      );
-
-      my $notify = XAS::Collector::Output::Database::Logs->new(
-          -alias    => 'database-logs',
-          -database => 'messaging',
-          -queue    => '/queue/logs',
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
 
 =head1 DESCRIPTION
 
 This module handles the xas-logs packet type.
 
+=head1 METHODS
+
+=head2 new
+
+This module inherits from L<XAS::Collector::Output::Database::Base|XAS::Collector::Output::Database::Base> 
+and takes the same parameters.
+
 =head1 PUBLIC EVENTS
 
 =head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
-This event will trigger the storage of xas-alert packets into the database. 
+This event will trigger the storage of xas-logs packets into the database. 
 
 =over 4
 

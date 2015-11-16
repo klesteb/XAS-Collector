@@ -15,7 +15,7 @@ use XAS::Class
   vars => {
     PARAMS => {
       -queue => 1
-      -eol => { optional => 1, default => "\n" }, # really? silly ruby programmers
+      -eol   => { optional => 1, default => "\n" }, # really? silly ruby programmers
     }
   }
 ;
@@ -151,41 +151,13 @@ XAS::Collector::Output::Socket::Base - Base method to interact with socket serve
 
 =head1 SYNOPSIS
 
-  use POE;
-  use XAS::Collector::Input::Stomp;
-  use XAS::Collector::Formatter::Logs;
   use XAS::Collector::Output::Socket::Logstash;
 
-  main: {
-
-      my $queue = '/queue/logs';
-      my $types => {
-         'xas-logs' => {
-             queue  => $queue,
-             format => 'format-logs',
-             output => 'socket-logstash',
-         },
-      };
-
-      my $input = XAS::Collector::Input::Stomp->new(
-         -alias => 'input-stomp',
-         -types => $types
-      );
-
-      my $formatter = XAS::Collector::Formatter::Logs->new(
-          -alias => 'format-logs',
-      );
-
-      my $output = XAS::Collector::Output::Socket::Logstash->new(
-          -alias => 'socket-logstash',
-          -queue => $queue,
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
+  my $output = XAS::Collector::Output::Socket::Logstash->new(
+      -alias => 'socket-logstash',
+      -queue => '/queue/logs',
+      -eol   => "\n",
+  );
 
 =head1 DESCRIPTION
 
@@ -209,6 +181,14 @@ The name of the queue that messages were processed from.
 The end-of-line terminator to use. Defaults to "\n". 
 
 =back
+
+=head1 PUBLIC EVENTS
+
+This module declares the following events.
+
+=head2 store_data
+
+This event is called when a packet is ready for processing.
 
 =head1 SEE ALSO
 

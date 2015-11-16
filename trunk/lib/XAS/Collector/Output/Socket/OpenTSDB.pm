@@ -65,48 +65,23 @@ XAS::Collector::Output::Socket::OpenTSDB - A class to interact with OpenTSDB
 
 =head1 SYNOPSIS
 
-  use POE;
-  use XAS::Collector::Input::Stomp;
-  use XAS::Collector::Formatter::Logs;
   use XAS::Collector::Output::Socket::OpenTSDB;
 
-  main: {
-
-      my $types => {
-         'xas-logs' => {
-             queue  => '/queue/logs',
-             format => 'format-logs',
-             output => 'output-opentsdb',
-         },
-      };
-
-      my $processor = XAS::Collector::Input::Stomp->new(
-         -alias => 'input-stomp',
-         -types => $types
-      );
-
-      my $formatter = XAS::Collector::Formatter::Logs->new(
-          -alias => 'format-logs',
-      );
-
-      my $output = XAS::Collector::Output::Socket::OpenTSDB->new(
-          -alias           => 'output-opentsdb',
-          -port            => 4242,
-          -host            => 'localhost',
-          -tcp_keepalive   => 1,
-          -retry_reconnect => 1.
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
-
+  my $output = XAS::Collector::Output::Socket::OpenTSDB->new(
+      -alias => 'output-opentsdb',
+      -queue => '/queue/nmon',
+  );
 
 =head1 DESCRIPTION
 
 This module will open and maintain a connection to a OpenTSDB server.
+
+=head1 METHODS
+
+=head2 new
+
+This module inherits from L<XAS::Collector::Output::Socket::Base|XAS::Collector::Output::Socket::Base> 
+and takes the same parameters.
 
 =head1 PUBLIC EVENTS
 

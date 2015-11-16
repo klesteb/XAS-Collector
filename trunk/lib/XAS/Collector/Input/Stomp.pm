@@ -305,9 +305,9 @@ XAS::Collector::Input::Stomp - A class for the XAS environment
  use XAS::Collector::Input::Stomp;
 
  my $types => {
-     'wpm-notify' => {
+     'xas-alerts' => {
          queue  => '/queue/alerts',
-         format => 'format-notify',
+         format => 'format-alerts',
          output => 'output-logstash',
      },
  };
@@ -342,25 +342,25 @@ may have meaning only on a L<RabbitMQ|http://www.rabbitmq.com/stomp.html> server
 
 =head1 PUBLIC EVENTS
 
-=head2 connection_up
+This module declares the following events:
 
-This method will subscrib to a queue on the STOMP server.
+=head2 pause_processing
 
-=head2 connection_down
+This event is broadcasted when the connection to the message queue server
+is down. It's purpose is to stop processing messages on a queue.
 
-This method will unsubscribe from a queue on the STOMP server.
+=head2 resume_processing
 
-=head2 handle_message
-
-This method will perform the neccessaty actions for the message type.
+This event is broadcasted when the connection to the message queue server
+is down. It's purpose is to start processing messages on a queue.
 
 =head1 SEE ALSO
 
 =over 4
 
-=item L<XAS|XAS>
-
 =item L<XAS::Collector>
+
+=item L<XAS|XAS>
 
 =back
 

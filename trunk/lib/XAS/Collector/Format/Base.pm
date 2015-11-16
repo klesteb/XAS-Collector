@@ -61,7 +61,18 @@ This module is the base class for formatting data.
 
 =head1 METHODS
 
-=head2 method1
+=head2 new
+
+This module inherits from L<XAS::Lib::POE::Session|XAS::Lib::POE::Session> and
+takes the same parameters.
+
+=head1 PUBLIC EVENTS
+
+This module declares the following events:
+
+=head2 format_data
+
+This event is called when data is available for formatting.
 
 =head1 SEE ALSO
 

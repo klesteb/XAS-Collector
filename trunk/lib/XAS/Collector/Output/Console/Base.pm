@@ -93,43 +93,16 @@ XAS::Collector::Output::Console::Base - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use POE;
-  use XAS::Collector::Input::Stomp;
-  use XAS::Collector::Formatter::Logs;
   use XAS::Collector::Output::Console::Logs;
 
-  main: {
-
-      my $types => {
-         'xas-logs' => {
-             queue  => '/queue/logs',
-             format => 'format-logs',
-             output => 'database-logs',
-         },
-      };
-
-      my $processor = XAS::Collector::Input::Stomp->new(
-         -alias => 'input-stomp',
-         -types => $types
-      );
-
-      my $formatter = XAS::Collector::Formatter::Logs->new(
-          -alias => 'format-logs',
-      );
-
-      my $notify = XAS::Collector::Output::Console::Logs->new(
-          -alias => 'database-logs',
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
+  my $notify = XAS::Collector::Output::Console::Logs->new(
+      -alias => 'database-logs',
+      -queue => /queue/logs',
+  );
 
 =head1 DESCRIPTION
 
-This module is the base class for database storage.
+This module is the base class for dumping data from packets.
 
 =head1 METHODS
 
@@ -142,9 +115,17 @@ takes these additional parameters:
 
 =item B<-queue>
 
-The name of the queue to process messages from.
+The name of the queue that messages were processed from.
 
 =back
+
+=head1 PUBLIC EVENTS
+
+This module declares the following events.
+
+=head2 store_data
+
+This event is called when a packet is ready for processing.
 
 =head1 SEE ALSO
 

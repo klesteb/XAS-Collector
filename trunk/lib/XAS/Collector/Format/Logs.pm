@@ -58,39 +58,26 @@ XAS::Collector::Format::Logs - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
+  use XAS::Collector::Formatter::Logs;
+
+  my $formatter = XAS::Collector::Formatter::Logs->new(
+      -alias => 'format-logs',
+  );
 
 =head1 DESCRIPTION
 
-This module handles the xas-logs packet type.
+This module formats the xas-logs packet type for output.
 
 =head1 METHODS
 
-=head2 new
-
-This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
-takes these additional parameters:
-
-=over 4
-
-=item B<-connector>
-
-The name of the connector session.
-
-=item B<-queue>
-
-The name of the queue to process messages from.
-
-=item B<-database>
-
-An optional configuration name for the database to use, defaults to 'messaging'.
-
-=back
+This module inherits from L<XAS::Collector::Format::Base|XAS::Collector::Format::Base>
+and takes the same parameters.
 
 =head1 PUBLIC EVENTS
 
-=head2 store_data(OBJECT, ARG0, ARG1)
+=head2 format_data(OBJECT, ARG0...ARG3)
 
-This event will trigger the storage of xas-alert packets into the database. 
+This event will trigger the formatting of xas-logs packets. 
 
 =over 4
 
@@ -100,11 +87,20 @@ A handle to the current object.
 
 =item B<ARG0>
 
-The data to be stored within the database.
+The data to be formatted.
 
 =item B<ARG1>
 
-The acknowledgement to send back to the message queue server.
+The acknowledgement to send back to the message queue server. This is passed 
+on to the output processor.
+
+=item B<ARG2>
+
+The alias of the input processor. This is passed on to the output processor.
+
+=item B<ARG3>
+
+The alias of the output processor.
 
 =back
 

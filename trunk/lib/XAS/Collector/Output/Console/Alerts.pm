@@ -59,55 +59,29 @@ XAS::Collector::Output::Console::Alerts - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use POE;
-  use XAS::Collector::Input::Stomp;
-  use XAS::Collector::Formatter::Alerts;
   use XAS::Collector::Output::Console::Alerts;
 
-  main: {
-
-      my $types => {
-         'xas-alert' => {
-             queue  => '/queue/alerts',
-             format => 'format-alerts',
-             output => 'database-alerts',
-         },
-      };
-
-      my $processor = XAS::Collector::Input::Stomp->new(
-         -alias => 'input-stomp',
-         -types => $types
-      );
-
-      my $formatter = XAS::Collector::Formatter::Alerts->new(
-          -alias => 'format-alerts',
-      );
-
-      my $notify = XAS::Collector::Output::Console::Alerts->new(
-          -alias => 'database-alerts',
-      );
-
-      $poe_kernel->run();
-
-      exit 0;
-
-  }
+  my $notify = XAS::Collector::Output::Console::Alerts->new(
+      -alias => 'database-alerts',
+      -queue => '/queue/alerts',
+  );
 
 =head1 DESCRIPTION
 
-This module handles the xas-alert packet type.
+This module handles the xas-alerts packet type.
 
 =head1 METHODS
 
 =head2 new
 
-This module inherits from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service>.
+This module inherits from L<XAS::Collector::Output::Console::Base|XAS::Collector::Output::Console::Base> 
+and takes the same parameters.
 
 =head1 PUBLIC EVENTS
 
 =head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
-This event will dump the contain of xas-alert packets to the console using
+This event will dump the contain of xas-alerts packets to the console using
 L<Data::Dumper|https://metacpan.org/pod/Data::Dumper>.
 
 =over 4
