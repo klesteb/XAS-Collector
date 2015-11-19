@@ -65,9 +65,9 @@ XAS::Collector::Format::Alerts - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use XAS::Collector::Formatter::Alerts;
+  use XAS::Collector::Format::Alerts;
 
-  my $formatter = XAS::Collector::Formatter::Alerts->new(
+  my $formatter = XAS::Collector::Format::Alerts->new(
       -alias => 'format-alerts',
   );
 

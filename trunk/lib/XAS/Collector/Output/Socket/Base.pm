@@ -167,7 +167,7 @@ This module will open and maintain a connection to a socker server.
 
 =head2 new
 
-This module inheirts from L<XAS::Lib::Net::POE::Client|XAS::Lib::Net::POE::Client> and
+This module inherits from L<XAS::Lib::Net::POE::Client|XAS::Lib::Net::POE::Client> and
 takes these additional parameters:
 
 =over 4

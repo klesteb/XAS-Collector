@@ -58,9 +58,9 @@ XAS::Collector::Format::Logs - Perl extension for the XAS Environment
 
 =head1 SYNOPSIS
 
-  use XAS::Collector::Formatter::Logs;
+  use XAS::Collector::Format::Logs;
 
-  my $formatter = XAS::Collector::Formatter::Logs->new(
+  my $formatter = XAS::Collector::Format::Logs->new(
       -alias => 'format-logs',
   );
 
