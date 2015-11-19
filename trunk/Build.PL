@@ -182,7 +182,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
         my $ini;
         my $base;
 
-        unless ($^O eq 'MSWin32') {
+        unless ($^O ne 'MSWin32') {
 
             $base = defined($ENV{'XAS_ETC'}) ? $ENV{'XAS_ETC'} : '/etc/xas';
             $ini = catfile($base, 'database.ini');

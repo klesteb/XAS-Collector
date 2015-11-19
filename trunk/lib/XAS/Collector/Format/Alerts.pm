@@ -77,6 +77,8 @@ This module formats the xas-alerts packet type for output.
 
 =head1 METHODS
 
+=head2 new
+
 This module inherits from L<XAS::Collector::Format::Base|XAS::Collector::Format::Base>
 and takes the same parameters.
 

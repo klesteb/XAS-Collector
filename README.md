@@ -18,8 +18,8 @@ details.
 This package provides the modules and procedures to interact with a
 Message Queue Server. It will retrieve messages, parse them and then
 store them in an appropiate datastore. The currently defined datastores
-are SQLite and Logstash. The provided modules can handle alerts and
-json logging.
+are SQLite, Logstash and SQL Databases. The provided modules can handle 
+alerts and json logging.
 
 Extended documentation is available at: http://scm.kesteb.us/trac
 

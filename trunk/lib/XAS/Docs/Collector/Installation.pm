@@ -74,14 +74,29 @@ It is recommended that you use L<Strawberry Perl|http://strawberryperl.com/>,
 L<ActiveState Perl|http://www.activestate.com/activeperl>
 doesn't have all of the necessary modules available. 
 
-The "post_install" step configures and creates a SQLite database.
-
 B<WARNING>
 
     Not all of the Perl modules have been included to make the software 
     run. You may need to load additional CPAN modules. How you do this,
     is dependent on how you manage your systems. This software requires 
     Perl 5.8.8 or higher to operate.
+
+=head1 DATABASE CREATION
+
+If you are planning to use a database as your datastore. The following will
+create a SQLite3 database.
+
+On Unix/Linux do the following:
+
+    # xas-create-schema --schema XAS::Model::Database::Messaging --directory .
+    # sqlite3 /var/lib/xas/messaging.db < ./XAS-Model-Schema-0.01-SQLite.sql
+    # rm -f ./XAS-Model-Schema-0.01-SQLite.sql
+   
+On Windows do the following:
+
+    > xas-create-schema --schema XAS::Model::Database::Messaging --directory .
+    > sqlite3 \XAS\lib\messaging.db < XAS-Model-Schema-0.01-SQLite.sql
+    > delete XAS-Model-Schema-0.01-SQLite.sql
 
 =head1 POST INSTALLATION
 
@@ -128,4 +143,3 @@ the terms of the Artistic License 2.0. For details, see the full text
 of the license at http://www.perlfoundation.org/artistic_license_2_0.
 
 =cut
-
