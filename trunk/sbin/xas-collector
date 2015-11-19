@@ -13,11 +13,11 @@
 # ENVIRONMENT: XAS Environment
 #
 # PARAMETERS:  
-#              --logfile      the log file to use
+#              --log-file     the log file to use
 #              --log-type     the type of log file
 #              --log-facility the facility class of the log
-#              --pidfile      the pid file to use
-#              --cfgfile      the configuration file to use
+#              --pid-file     the pid file to use
+#              --cfg-file     the configuration file to use
 #              --install      install as a service on Windows
 #              --deinstall    deinstall as a service on Windows
 #              --help         prints out a helpful help message
@@ -63,11 +63,11 @@ xas-collector [--help] [--debug] [--manual] [--version]
 
  options:
 
-    --logfile      the log file to use
+    --log-file     the log file to use
     --log-type     the type of log file
     --log-facility the facility class of the log
-    --pidfile      the pid file to use
-    --cfgfile      the configuration file to use
+    --pid-file     the pid file to use
+    --cfg-file     the configuration file to use
     --install      install as a service on Windows
     --deinstall    deinstall as a service on Windows
     --help         prints out a helpful help message
@@ -126,7 +126,7 @@ data too.
 
 =over 4
 
-=item B<-cfgfile>
+=item B<-cfg-file>
 
 The configuration file to use.
 
@@ -140,11 +140,11 @@ Toggles the log type. Defaults to 'console'. Can be 'console', 'file',
 Toggles the log facilty. Defaults to 'local6'. This follows syslog
 convention.
 
-=item B<--logfile>
+=item B<--log-file>
 
 The log file to use.
 
-=item B<--pidfile>
+=item B<--pid-file>
 
 the pid file to use.
 
