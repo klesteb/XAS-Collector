@@ -27,6 +27,7 @@ XAS::Collector - A set of procedures and modules to retrieve messages and store 
            queue  => '/queue/logs',
            format => 'format-logs',
            output => 'database-logs',
+           input  => 'input-stomp'
         },
     };
 	
@@ -42,7 +43,6 @@ XAS::Collector - A set of procedures and modules to retrieve messages and store 
     my $output = XAS::Collector::Output::Database::Logs->new(
         -alias    => 'database-logs',
         -database => 'messaging',
-        -queue    => '/queue/logs',
     );
 	
     $poe_kernel->run();

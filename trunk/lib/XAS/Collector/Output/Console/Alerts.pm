@@ -60,7 +60,7 @@ XAS::Collector::Output::Console::Alerts - Perl extension for the XAS Environment
 
   use XAS::Collector::Output::Console::Alerts;
 
-  my $notify = XAS::Collector::Output::Console::Alerts->new(
+  my $output = XAS::Collector::Output::Console::Alerts->new(
       -alias => 'database-alerts',
   );
 
