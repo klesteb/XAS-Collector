@@ -22,7 +22,6 @@ sub store_data {
     my $buffer;
     my $alias  = $self->alias;
     my $schema = $self->schema;
-    my $queue  = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
 
@@ -35,7 +34,7 @@ sub store_data {
     $self->log->info(Dumper($data));
     $self->log->info_msg('collector_processed', $alias, 1, $data->{'hostname'}, $data->{'datetime'});
 
-    $poe_kernel->post($input, 'send_data', $ack);
+    $poe_kernel->post($input, 'write_data', $ack);
 
     $self->log->debug("$alias: leaving store_notify()");
 
@@ -63,7 +62,6 @@ XAS::Collector::Output::Console::Alerts - Perl extension for the XAS Environment
 
   my $notify = XAS::Collector::Output::Console::Alerts->new(
       -alias => 'database-alerts',
-      -queue => '/queue/alerts',
   );
 
 =head1 DESCRIPTION

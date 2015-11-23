@@ -28,7 +28,6 @@ sub store_data {
     my $buffer;
     my $alias  = $self->alias;
     my $schema = $self->schema;
-    my $queue  = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
 
@@ -46,7 +45,7 @@ sub store_data {
         Log->create($schema, $data);
 
         $self->log->info_msg('collector_processed', $alias, 1, $data->{'hostname'}, $data->{'datetime'});
-        $poe_kernel->post($input, 'send_data', $ack);
+        $poe_kernel->post($input, 'write_data', $ack);
 
     } catch {
 
@@ -55,7 +54,7 @@ sub store_data {
         $self->exception_handler($ex);
         $self->event->publish(
             -event => 'stop_queue',
-            -args  => $queue
+            -args  => $alias
         );
 
     };
@@ -87,7 +86,6 @@ XAS::Collector::Output::Database::Logs - Perl extension for the XAS Environment
   my $output = XAS::Collector::Output::Database::Logs->new(
       -alias    => 'database-logs',
       -database => 'messaging',
-      -queue    => '/queue/logs',
   );
 
 

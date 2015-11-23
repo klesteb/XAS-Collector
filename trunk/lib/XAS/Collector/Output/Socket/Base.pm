@@ -14,8 +14,7 @@ use XAS::Class
   accessors => 'event',
   vars => {
     PARAMS => {
-      -queue => 1,
-      -eol   => { optional => 1, default => "\n" }, # really? silly ruby programmers
+      -eol => { optional => 1, default => "\n" }, # really? silly ruby programmers
     }
   }
 ;
@@ -62,13 +61,12 @@ sub connection_down {
     my ($self) = $_[OBJECT];
 
     my $alias = $self->alias;
-    my $queue = $self->queue;
 
     $self->log->warn_msg('collector_down', $alias);
 
     $self->event->publish(
         -event => 'stop_queue',
-        -args  => $queue
+        -args  => $alias
     );
 
 }
@@ -77,13 +75,12 @@ sub connection_up {
     my ($self) = $_[OBJECT];
 
     my $alias = $self->alias;
-    my $queue = $self->queue;
 
     $self->log->warn_msg('collector_up', $alias);
 
     $self->event->publish(
         -event => 'start_queue',
-        -args  => $queue
+        -args  => $alias
     );
 
 }
@@ -155,7 +152,6 @@ XAS::Collector::Output::Socket::Base - Base method to interact with socket serve
 
   my $output = XAS::Collector::Output::Socket::Logstash->new(
       -alias => 'socket-logstash',
-      -queue => '/queue/logs',
       -eol   => "\n",
   );
 
@@ -171,10 +167,6 @@ This module inherits from L<XAS::Lib::Net::POE::Client|XAS::Lib::Net::POE::Clien
 takes these additional parameters:
 
 =over 4
-
-=item B<-queue>
-
-The name of the queue that messages were processed from.
 
 =item B<-eol>
 

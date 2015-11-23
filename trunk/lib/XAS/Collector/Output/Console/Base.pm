@@ -13,11 +13,6 @@ use XAS::Class
   mixin     => 'XAS::Lib::Mixins::Handlers',
   utils     => 'db2dt',
   accessors => 'schema event',
-  vars => {
-    PARAMS => {
-      -queue => 1,
-    }
-  }
 ;
 
 #use Data::Dumper;
@@ -51,13 +46,12 @@ sub session_startup {
     my $self = shift;
 
     my $alias = $self->alias;
-    my $queue = $self->queue;
 
     $self->log->debug("$alias: entering session_startup()");
 
     $self->event->publish(
         -event => 'start_queue',
-        -args  => $queue 
+        -args  => $alias
     );
 
     # walk the chain
@@ -97,7 +91,6 @@ XAS::Collector::Output::Console::Base - Perl extension for the XAS Environment
 
   my $notify = XAS::Collector::Output::Console::Logs->new(
       -alias => 'database-logs',
-      -queue => /queue/logs',
   );
 
 =head1 DESCRIPTION
@@ -109,15 +102,7 @@ This module is the base class for dumping data from packets.
 =head2 new
 
 This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
-takes these additional parameters:
-
-=over 4
-
-=item B<-queue>
-
-The name of the queue that messages were processed from.
-
-=back
+takes the same parameters:
 
 =head1 PUBLIC EVENTS
 

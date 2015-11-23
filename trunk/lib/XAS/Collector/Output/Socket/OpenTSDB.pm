@@ -22,7 +22,6 @@ sub store_data {
     my ($self, $data, $ack, $input) = @_[OBJECT, ARG0...ARG2];
 
     my $alias = $self->alias;
-    my $queue = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
 
@@ -69,7 +68,6 @@ XAS::Collector::Output::Socket::OpenTSDB - A class to interact with OpenTSDB
 
   my $output = XAS::Collector::Output::Socket::OpenTSDB->new(
       -alias => 'output-opentsdb',
-      -queue => '/queue/nmon',
   );
 
 =head1 DESCRIPTION

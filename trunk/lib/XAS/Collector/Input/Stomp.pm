@@ -200,9 +200,9 @@ sub pause_processing {
 
     foreach my $type (keys %{$self->{'types'}}) {
 
-        my $queue = $self->{'types'}->{$type}->{'queue'};
+        my $ralias = $self->{'types'}->{$type}->{'input'};
 
-        $poe_kernel->post($alias, 'stop_queue', $queue);
+        $poe_kernel->post($alias, 'stop_queue', $ralias);
 
     }
 
@@ -219,9 +219,9 @@ sub resume_processing {
 
     foreach my $type (keys %{$self->{'types'}}) {
 
-        my $queue = $self->{'types'}->{$type}->{'queue'};
+        my $ralias = $self->{'types'}->{$type}->{'input'};
 
-        $poe_kernel->post($alias, 'start_queue', $queue);
+        $poe_kernel->post($alias, 'start_queue', $ralias);
 
     }
 
@@ -234,9 +234,10 @@ sub resume_processing {
 # ----------------------------------------------------------------------
 
 sub _start_queue {
-    my ($self, $queue) = @_[OBJECT,ARG0];
+    my ($self, $ralias) = @_[OBJECT,ARG0];
 
     my $alias = $self->alias;
+    my $queue = $self->_find_queue($ralias);
 
     if ($self->connected) {
 
@@ -251,7 +252,7 @@ sub _start_queue {
 
     } else {
 
-        $poe_kernel->delay_add('start_queue', 5, $queue);
+        $poe_kernel->delay_add('start_queue', 5, $ralias);
         $self->log->warn_msg('collector_waiting', $alias, $queue);
 
     }
@@ -259,9 +260,10 @@ sub _start_queue {
 }
 
 sub _stop_queue {
-    my ($self, $queue) = @_[OBJECT,ARG0];
+    my ($self, $ralias) = @_[OBJECT,ARG0];
 
     my $alias = $self->alias;
+    my $queue = $self->_find_queue($ralias);
 
     if ($self->connected) {
 
@@ -292,6 +294,30 @@ sub init {
 
 }
 
+sub _find_queue {
+    my $self  = shift;
+    my $ralias = shift;
+
+    my $queue = '';
+    my $alias = $self->alias;
+
+    $self->log->debug(sprintf('%s: find_queue() alias = %s', $alias, $railas));
+
+    while (my ($key, $value) = each(%{$self->{'types'}})) {
+
+        if (($value->{'input'}  eq $ralias) or
+            ($value->{'output'} eq $ralias)) {
+
+            $queue = $value->{'queue'};
+
+        }
+
+    }
+
+    return $queue;
+
+}
+
 1;
 
 __END__
@@ -308,11 +334,13 @@ XAS::Collector::Input::Stomp - A class for the XAS environment
      'xas-alerts' => {
          queue  => '/queue/alerts',
          format => 'format-alerts',
+         input  => 'input-stomp',
          output => 'output-logstash',
      },
  };
 
  my $processor = XAS::Collector::Input::Stomp->new(
+     -alias => 'input-stomp',
      -types => $types
  );
 

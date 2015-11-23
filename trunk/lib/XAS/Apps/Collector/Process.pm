@@ -57,12 +57,14 @@ sub setup {
         my $queue  = $self->cfg->val($section, 'queue');
         my $output = $self->cfg->val($section, 'output');
         my $format = $self->cfg->val($section, 'format');
+        my $input  = $self->cfg->val($section, 'input');
 
         $type = trim($type);
         $types->{$type} = {
             queue  => $queue,
             format => $format,
-            output => $output
+            output => $output,
+            input  => $input,
         };
 
     }
@@ -101,16 +103,6 @@ sub setup {
             my $module = $self->cfg->val($section, 'module');
             my @parameters = $self->cfg->Parameters($section);
             my @args = $self->build_args($section, \@parameters);
-
-            while (my ($key, $value) = each %$types) {
-
-                if ($value->{'output'} eq $alias) {
-
-                    push(@args, '-queue', $value->{'queue'});
-
-                }
-
-            }
 
             load_module($module);
             $module->new(@args);

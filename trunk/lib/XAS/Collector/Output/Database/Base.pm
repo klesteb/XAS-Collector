@@ -16,7 +16,6 @@ use XAS::Class
   accessors => 'schema event',
   vars => {
     PARAMS => {
-      -queue    => 1,
       -database => { optional => 1, default => 'messaging' },
     }
   }
@@ -53,13 +52,12 @@ sub session_startup {
     my $self = shift;
 
     my $alias = $self->alias;
-    my $queue = $self->queue;
 
     $self->log->debug("$alias: entering session_startup()");
 
     $self->event->publish(
         -event => 'start_queue',
-        -args  => $queue 
+        -args  => $alias 
     );
 
     # walk the chain
@@ -101,7 +99,6 @@ XAS::Collector::Output::Database::Base - Perl extension for the XAS Environment
   my $output = XAS::Collector::Output::Database::Logs->new(
       -alias    => 'database-logs',
       -database => 'messaging',
-      -queue    => '/queue/logs',
   );
 
 =head1 DESCRIPTION
@@ -116,10 +113,6 @@ This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
 takes these additional parameters:
 
 =over 4
-
-=item B<-queue>
-
-The name of the queue to process messages from.
 
 =item B<-database>
 

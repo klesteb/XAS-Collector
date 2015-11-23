@@ -28,7 +28,6 @@ sub store_data {
     my $buffer;
     my $alias  = $self->alias;
     my $schema = $self->schema;
-    my $queue  = $self->queue;
 
     $self->log->debug("$alias: entering store_data()");
 
@@ -53,12 +52,12 @@ sub store_data {
         $self->exception_handler($ex);
         $self->event->publish(
             -event => 'stop_queue',
-            -args  => $queue
+            -args  => $alias
         );
 
     };
 
-    $poe_kernel->post($input, 'send_data', $ack);
+    $poe_kernel->post($input, 'write_data', $ack);
 
     $self->log->debug("$alias: leaving store_notify()");
 
@@ -87,7 +86,6 @@ XAS::Collector::Output::Database::Alerts - Perl extension for the XAS Environmen
   my $notify = XAS::Collector::Output::Database::Alerts->new(
       -alias    => 'database-alerts',
       -database => 'messaging',
-      -queue    => '/queue/alerts',
   );
 
 =head1 DESCRIPTION
