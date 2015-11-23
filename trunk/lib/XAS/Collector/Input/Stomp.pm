@@ -301,7 +301,7 @@ sub _find_queue {
     my $queue = '';
     my $alias = $self->alias;
 
-    $self->log->debug(sprintf('%s: find_queue() alias = %s', $alias, $railas));
+    $self->log->debug(sprintf('%s: find_queue() alias = %s', $alias, $ralias));
 
     while (my ($key, $value) = each(%{$self->{'types'}})) {
 
