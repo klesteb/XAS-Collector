@@ -36,7 +36,7 @@ XAS::Collector - A set of procedures and modules to retrieve messages and store 
         -types => $types
     );
 	
-    my $formatter = XAS::Collector::Format::Logs->new(
+    my $format = XAS::Collector::Format::Logs->new(
         -alias => 'format-logs',
     );
 	
@@ -55,7 +55,7 @@ XAS::Collector - A set of procedures and modules to retrieve messages and store 
 
 These modules are used to collect messages from a STOMP based message queue
 server. The messages are then parsed and forwarded to an appropiate
-datastore.
+data store.
 
 =head1 SEE ALSO
 

@@ -101,8 +101,8 @@ This module is the base class for dumping data from packets.
 
 =head2 new
 
-This module inheirts from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
-takes the same parameters:
+This module inherits from L<XAS::Lib::POE::Service|XAS::Lib::POE::Service> and
+takes the same parameters.
 
 =head1 PUBLIC EVENTS
 
