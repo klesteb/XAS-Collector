@@ -25,14 +25,13 @@ sub format_data {
 
     $self->log->debug("$alias: format");
 
-    my $dt = db2dt($data->{'datetime'});
     my $message = sprintf('[%s] %s - %s - %s - %s',
         $data->{'datetime'}, $data->{'hostname'}, $data->{'facility'},
         $data->{'priority'}, $data->{'message'}
     );
 
     my $rec = {
-        datetime   => $dt->strftime('%Y-%m-%dT%H:%M:%S.%3N%z'),
+        datetime   => $data->{'datetime'},
         hostname   => $data->{'hostname'},
         level      => $data->{'priority'},
         facility   => $data->{'facility'},
