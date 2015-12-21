@@ -72,7 +72,7 @@ XAS::Collector::Output::Socket::OpenTSDB - A class to interact with OpenTSDB
 
 =head1 DESCRIPTION
 
-This module will open and maintain a connection to a OpenTSDB server.
+This module will open and maintain a connection to a L<OpenTSDB|http://opentsdb.net/> server.
 
 =head1 METHODS
 
@@ -85,7 +85,7 @@ and takes the same parameters.
 
 =head2 store_data(OBJECT, ARG0, ARG1, ARG2)
 
-This event will trigger the sending of packets to a opentsdb instance. 
+This event will trigger the sending of packets to a L<OpenTSDB|http://opentsdb.net/> instance. 
 
 =over 4
 
@@ -111,6 +111,10 @@ The input to return the ack too.
 
 =over 4
 
+=item L<XAS::Collector::Output::Socket::Base|XAS::Collector::Output::Socket::Base>
+
+=item L<XAS::Collector::Output::Socket::Logstash|XAS::Collector::Output::Socket::Logstash>
+
 =item L<XAS::Collector|XAS::Collector>
 
 =item L<XAS|XAS>
@@ -123,7 +127,7 @@ Kevin L. Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2014 Kevin L. Esteb
+Copyright (c) 2012-2015 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text

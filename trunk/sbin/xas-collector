@@ -85,42 +85,8 @@ specific modules needed to do this task.
 
 =head1 CONFIGURATION
 
-The configuration file is the familiar Windows .ini format. It has the 
-following stanzas.
-
- [collector: input]
- module = XAS::Collector::Input::Stomp
- port = 61613
- host = localhost
- alias = input-stomp
-
-This stanza defines an input for the collector. There can be multiple. The
-"input" in thae stanzas name must be unique. The "module" is what to load and
-subsequent parameters are used by that module for initialization. They don't
-need a preceeding "-".
-
- [collector: output]
- module = XAS::Collector::Output::Socket::Logstash
- port = 9500
- host = localhost
- alias = output-logstash
-
-This stanza defines an output for the collector. There can be multiple. The
-"output" in the stanzas name must be unique. The "module" is what to load and
-subsequent parameters are used by that module for initialization. They don't
-need a preceeding "-".
-
- [collector: xas-alerts]
- module = XAS::Collector::Formatter::Alerts
- alias = format-alerts
- queue = /queue/alerts
- output = output-logstash
-
-This stanza defines a formatter for the collector. There can be multiple. The
-'wise-notify' is a known message type. It is also used by inputs to forward
-message types to the correct formatters. The "queue" is what queue the inputs
-should monitor and "output" is the alias of the outputer to send the formatted
-data too.
+Please refer to L<XAS::Apps::Collector::Process|XAS::Apps::Collector::Process> 
+for configuration file information.
 
 =head1 OPTIONS AND ARGUMENTS
 
@@ -180,9 +146,11 @@ Prints out the apps version
 
 =over 4
 
-=item L<XAS|XAS>
+=item L<XAS::Apps::Collector::Process|XAS::Apps::Collector::Process>
 
 =item L<XAS::Collector|XAS::Collector>
+
+=item L<XAS|XAS>
 
 =back
 
@@ -192,7 +160,7 @@ Kevin L. Esteb, E<lt>kesteb@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2014 Kevin L. Esteb
+Copyright (c) 2012-2014 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text

@@ -110,6 +110,10 @@ The alias of the output processor.
 
 =over 4
 
+=item L<XAS::Collector::Format::Base|XAS::Collector::Format::Base>
+
+=item L<XAS::Collector::Format::Alerts|XAS::Collector::Format::Alerts>
+
 =item L<XAS::Collector|XAS::Collector>
 
 =item L<XAS|XAS>

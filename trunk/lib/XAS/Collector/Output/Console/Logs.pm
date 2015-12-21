@@ -108,6 +108,10 @@ The input to return the ack too.
 
 =over 4
 
+=item L<XAS::Collector::Output::Console::Base|XAS::Collector::Output::Console::Base>
+
+=item L<XAS::Collector::Output::Console::Alerts|XAS::Collector::Output::Console::Alerts>
+
 =item L<XAS::Collector|XAS::Collector>
 
 =item L<XAS|XAS>
@@ -120,7 +124,7 @@ Kevin Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2015 Kevin L. Esteb
+Copyright (c) 2012-2015 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text

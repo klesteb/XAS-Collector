@@ -78,6 +78,10 @@ This event is called when data is available for formatting.
 
 =over 4
 
+=item L<XAS::Collector::Format::Alerts|XAS::Collector::Format::Alerts>
+
+=item L<XAS::Collector::Format::Logs|XAS::Collector::Format::Logs>
+
 =item L<XAS::Colletor|XAS::Collector>
 
 =item L<XAS|XAS>
@@ -90,7 +94,7 @@ Kevin L. Esteb, E<lt>kevin@kesteb.usE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2015 Kevin L. Esteb
+Copyright (c) 2012-2015 Kevin L. Esteb
 
 This is free software; you can redistribute it and/or modify it under
 the terms of the Artistic License 2.0. For details, see the full text
