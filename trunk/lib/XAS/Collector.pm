@@ -33,11 +33,11 @@ based on a configuration file.
 
 =over 4
 
-=item xas-collector --help
+=item B<xas-collector --help>
 
 This will display a brief help screen on command options.
 
-=item xas-collector --manual
+=item B<xas-collector --manual>
 
 This will display the utilities man page.
 
