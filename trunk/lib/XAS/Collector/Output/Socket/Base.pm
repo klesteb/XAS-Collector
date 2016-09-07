@@ -9,7 +9,7 @@ use XAS::Lib::POE::PubSub;
 use XAS::Class
   debug     => 0,
   version   => $VERSION,
-  base      => 'XAS::Lib::Stomp::POE::Client',
+  base      => 'XAS::Lib::Net::POE::Client',
   mixin     => 'XAS::Lib::Mixins::Handlers',
   accessors => 'event',
   vars => {
