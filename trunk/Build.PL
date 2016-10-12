@@ -3,13 +3,16 @@ use warnings FATAL => 'all';
 use Module::Build;
 
 my $requires = {
-    'perl'       => 5.008_08,
-    'XAS'        => 0.08,
-    'XAS::Model' => 0.01,
+    'perl'                  => 5.008_08,
+    'XAS'                   => 0.08,
+    'XAS::Model'            => 0.01,
+    'File::Slurp'           => 9999.19',
+    'Search::Elasticsearch' => 2.03,
 };
     
 my $sysconfig = ( -e '/etc/default' ) ? '/etc/default' : '/etc/sysconfig';
 my $install_path = {
+    db            => '/var/lib/xas',
     etc           => '/etc/xas',
     sbin          => '/usr/sbin',
     script        => '/usr/bin',
@@ -24,6 +27,7 @@ if ($^O eq 'MSWin32') {
     my $path = defined($ENV{XAS_ROOT}) ? $ENV{XAS_ROOT} : 'C:\\xas';
 
     my $install_path = {
+        db            => $path . '\\var\\lib',
         etc           => $path . '\\etc',
         sbin          => $path . '\\sbin',
         script        => $path . '\\bin',
@@ -236,6 +240,27 @@ my $class = Module::Build->subclass(code => <<'EOC');
 
     # correctly process additional directories
 
+    sub process_db_files {
+        my $self = shift;
+
+            
+        my $result;
+        my $dir = catfile('blib', 'lib');
+        my $files = $self->find_db_files;
+
+        mkdir $dir unless (-e $dir);
+
+        while (my ($from, $to) = each %$files) {
+
+            $to = catfile('blib', $to);
+            $result = $self->copy_if_modified(from => $from, to => $to);
+
+        }
+
+        return $self;
+
+    }
+
     sub process_etc_files {
         my $self = shift;
 
@@ -361,6 +386,7 @@ my $class = Module::Build->subclass(code => <<'EOC');
 
     }
 
+    sub find_db_files { shift->find_all_files_no_scm('db'); }
     sub find_etc_files { shift->find_all_files_no_scm('etc'); }
     sub find_sbin_files { shift->find_all_files_no_scm('sbin'); }
     sub find_initd_files { shift->find_all_files_no_scm('init.d'); }
@@ -425,6 +451,7 @@ my $builder = $class->new(
     requires           => $requires
 );
 
+$builder->add_build_element('db');
 $builder->add_build_element('etc');
 $builder->add_build_element('msg');
 $builder->add_build_element('sbin');

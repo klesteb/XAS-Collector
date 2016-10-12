@@ -1,5 +1,6 @@
 Build.PL
 Changes
+db/messaging.db
 debian/changelog
 debian/compat
 debian/control
@@ -27,6 +28,7 @@ lib/XAS/Collector/Output/Database/Base.pm
 lib/XAS/Collector/Output/Database/Alerts.pm
 lib/XAS/Collector/Output/Database/Logs.pm
 lib/XAS/Collector/Output/Socket/Base.pm
+lib/XAS/Collector/Output/Socket/ElasticSearch.pm
 lib/XAS/Collector/Output/Socket/Logstash.pm
 lib/XAS/Collector/Output/Socket/OpenTSDB.pm
 lib/XAS/Docs/Collector/Installation.pm

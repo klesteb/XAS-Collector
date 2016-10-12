@@ -11,7 +11,9 @@ BuildArch:      noarch
 BuildRequires:  perl(Module::Build)
 BuildRequires:  perl(Test::More)
 Requires:       perl(XAS) >= 0.08
-Requires:       perl(XAS::Model> >= 0.01
+Requires:       perl(XAS::Model) >= 0.01
+Requires:       perl(File::Slurp) >= 9999.19
+Requires:       perl(Search::Elasticsearch) >= 2.03
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 %define _initd      %{_sysconfdir}/rc.d/init.d
